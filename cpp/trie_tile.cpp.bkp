@@ -1,0 +1,46 @@
+#include <iostream>
+#include <queue>
+#include <vector>
+#include <ctime>
+
+using namespace std;
+
+#define NUM_ENTRIES         10
+#define THRESHOLD_WEIGHT    500
+
+typedef struct entry_info_ {
+    int prefix_len;
+    int weight;
+} entry_info_t;
+
+entry_info_t entry_arr[NUM_ENTRIES];
+
+struct comparator {
+    bool operator() ( std::pair<int, int> i, std::pair<int, int> j ) {
+        return (i.second < j.second);
+    }
+};
+
+int main(int argc, char *argv[])
+{
+    srand(time(0));
+
+    priority_queue<std::pair<int, int>, std::vector<std::pair<int, int> >, comparator> maxHeap;
+
+    maxHeap.push(std::make_pair(10, 10));
+    maxHeap.push(std::make_pair(5, 5));
+    maxHeap.push(std::make_pair(12, 12));
+    maxHeap.push(std::make_pair(3, 3));
+    maxHeap.push(std::make_pair(3, 3));
+    maxHeap.push(std::make_pair(4, 4)); 
+
+    std::pair <int, int> t = maxHeap.top();
+    std::cout << t.second << std::endl;
+
+    while(!maxHeap.empty()) {
+        cout << "elem: " << maxHeap.top().second << endl;
+        maxHeap.pop();
+    }
+
+    return 0;
+}

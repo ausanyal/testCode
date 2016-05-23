@@ -1,0 +1,6 @@
+abcbcd bcd
+abcbcd bce
+abcbcd b.d
+abcbcd ...
+abcbcd b*
+abbbd b*e

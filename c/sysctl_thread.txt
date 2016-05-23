@@ -1,0 +1,9 @@
+Main Thread: waiting on thread1 
+Thread Id: 1 name: thread-1 
+old hostname: AUSANYAL-M-G0JV 
+old hostname: AUSANYAL-M-G0JV 
+Main Thread: thread1 done 
+
+
+Main Thread: waiting on thread2 
+Thread Id: 2 name: thread-2 

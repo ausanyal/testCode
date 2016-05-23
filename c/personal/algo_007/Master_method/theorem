@@ -1,0 +1,15 @@
+
+    Tn  <=  aT(n/b) + O(n^d) 
+
+        -----
+        |    O(n^d logn)    if a = b^d       
+        |
+        |
+        |
+T(n) =  |   O(n^d)          if a < b^d
+        |
+        |
+        |
+        |   O(n^(logb(a))   if a > b^d
+        |
+        |------

@@ -1,0 +1,2371 @@
+Source Base: sanos (src_base://acme/sanos)
+
+Component: feature/oam (ins-sw-bld14:/localetna/ausanyal-sjc/amz_886_itr/feature/oam)
+
+Index: feature/oam/server/export/isan/oam_defs.h
+===================================================================
+--- server/export/isan/.CC/cache/oam_defs.h@@/main/antares/6	2014-12-03 14:49:17.000000000 -0800
++++ server/export/isan/oam_defs.h	2014-12-07 13:43:11.000000000 -0800
+@@ -44,6 +44,9 @@
+     PING_PKT_TIMER = 2,
+     OAM_PROCESS_START_TIMER = 3,
+     OAM_TASK_INTERVAL_TIMER = 4,
++    ITR_EXT_PER_HOP_TIMEOUT_TIMER = 5,
++    ITR_EXT_INTERVAL_TIMER = 6,
++    ITR_EXT_HOP_FAKE_TIMER = 7
+ } oam_timer_type_t;
+ 
+ 
+
+Index: feature/oam/server/itr.h
+===================================================================
+--- server/.CC/cache/itr.h@@/main/antares/13	2014-12-03 14:49:17.000000000 -0800
++++ server/itr.h	2014-12-09 04:46:44.000000000 -0800
+@@ -33,6 +33,7 @@
+ #include "isan/oam_defs.h"
+ #include "ObjStoreIntf.h"
+ #include "oam_cir_buffer.h"
++#include "ht.h"
+ 
+ #define ITR_MAX_VRF_NAME_LEN 64
+ // The input for traceroute. 
+@@ -58,6 +59,246 @@
+     uint16 num_multipath;
+ } itr_input_t;
+ 
++#define ITR_EXT_DEBUG 1
++typedef enum itr_prot_type_ {
++    ITR_PROT_TCP = TCP_PROT,
++    ITR_PROT_UDP = UDP_PROT,
++    ITR_PROT_ICMP = ICMP_PROT
++}itr_prot_type_t;
++
++typedef enum {
++    ITR_EXT_ICMP_TYPE_TTL_EXP = 1,
++    ITR_EXT_ICMP_TYPE_INF_REP,
++    ITR_EXT_ICMP_TYPE_PORT_UNR,
++    ITR_EXT_ICMP_TYPE_UNDEFINED
++} itr_ext_icmp_type_t;
++
++typedef enum {
++    ITR_EXT_TCP_TYPE_ACK = 1,
++    ITR_EXT_TCP_TYPE_RST,
++} itr_ext_tcp_type_t;
++
++typedef enum {
++    ITR_EXT_TCP_ST_UNDEF = 0,
++    ITR_EXT_TCP_ST_INITED,
++    ITR_EXT_TCP_ST_ACKED,
++    ITR_EXT_TCP_ST_PRT_UNR,
++    ITR_EXT_TCP_ST_RST,
++} itr_ext_tcp_state_t;
++
++typedef enum itr_ext_ht_state_ {
++    ITR_EXT_HT_UNINIT=1,
++    ITR_EXT_HT_INITED,
++    ITR_EXT_HT_FREED
++}itr_ext_ht_state_t;
++
++typedef enum per_hop_status_ {
++    HOP_STATUS_INITIATED = 0,
++    HOP_STATUS_IN_PROGRESS,
++    HOP_STATUS_SUCCESS,
++    HOP_STATUS_FAILURE,
++    HOP_STATUS_UNDEFINED
++} per_hop_status_t;
++
++typedef enum ht_path_status_ {
++    HT_STA_PTH_IN_PROG = 1,
++    HT_STA_PTH_INC,
++    HT_STA_PTH_CMP
++} ht_path_status_t;
++
++typedef struct ecmp_entry_ {
++    uint32              bt_tep_ip;
++} path_entry_t;
++
++typedef struct five_tuple_info_ {
++    uint32_t            src_ip;
++    uint32_t            dst_ip;
++    uint32_t            src_port;
++    uint32_t            dst_port;
++    itr_prot_type_t     prot;
++} five_tuple_info_t;
++
++typedef struct ext_trace_cfg_t_ {
++    uint32              src_ip;
++    uint32              dst_ip;
++    uint16              src_node_id;
++    uint16              dst_node_id;
++    itr_prot_type_t     prot;
++    mac_t               src_mac;
++    mac_t               dst_mac;
++    uint32              vxlan_nid;
++    vlan_id_t           vlan;
++    uint32_t            fdvlan;
++    uint16              payload_sz;
++    uint64              probe_int_ttl_sec;
++    uint64              probe_int_ttl_usec;
++    uint64              per_hop_ttl_sec;
++    uint64              per_hop_ttl_usec;
++#ifdef ITR_EXT_DEBUG
++    uint64              fake_hop_sec;
++    uint64              fake_hop_usec;
++#endif
++    uint32              max_hops; // num_probes_er_path
++    char                vrf_name[ITR_MAX_VRF_NAME_LEN];
++
++} ext_trace_cfg_t;
++
++typedef struct {
++    uint16              batch_id;
++    uint32              bt_tep_ip;
++} itr_ext_input_t;
++
++#define ITR_EXT_MAX_BTS 128
++
++typedef struct {
++    uint32              num_paths;
++    uint32              sport_start;
++    uint32              sport_end;
++    uint32              dport_start;
++    uint32              dport_end;
++    uint32              num_bts;
++    uint32              bt_teps[ITR_EXT_MAX_BTS];
++    ext_trace_cfg_t     trace_cfg;
++    // input cfg to be alloced per path
++    itr_ext_input_t     *input[ITR_EXT_MAX_BTS];
++
++#define NP  (itr_ext_config->num_paths)
++#define SPS (itr_ext_config->sport_start) 
++#define SPE (itr_ext_config->sport_end) 
++#define DPS (itr_ext_config->dport_start) 
++#define DPE (itr_ext_config->dport_end) 
++
++} itr_ext_config_t;
++
++#define MAX_EXT_PATH 256
++#define ITR_EXT_NODE_IP_WILDCARD ((uint32) -1)
++
++typedef struct itr_ext_batch_ {
++    uint32_t            batch_id;
++    boolean             in_use;
++    uint32_t            active_probes;
++    uint32_t            num_paths;
++    ht_t                itr_ext_batch_ht;
++    itr_ext_ht_state_t  ht_state;
++    path_entry_t        ext_path[MAX_EXT_PATH];
++    // acl handle
++    // acl_hndl         *acl_hndl;
++}itr_ext_batch_t;
++
++#define MAX_EXT_ITR_BATCHES 1024
++struct itr_ext_global_info_t {
++    itr_ext_batch_t     itr_ext_batch[MAX_EXT_ITR_BATCHES];
++    //itr_ext_input_t itr_ext_inputs[MAX_EXT_ITR_BATCHES];
++    uint16              ext_batch_id;
++    uint16              num_active_batches;
++} itr_ext_global_info;
++
++GList *itr_ext_waitlist;
++
++#define ITR_EXT_HT_SZ             4096
++#define ITR_EXT_HT_LOAD_FACTOR    1.0
++
++typedef struct itr_ext_key_ {
++    uint32_t            bt_tep_ip;
++    five_tuple_info_t   five_tuple_info;
++
++}itr_ext_key_t;
++
++typedef struct itr_ext_per_hop_info_ {
++    uint32_t            my_ttl;
++    uint64              hop_start_ts;
++    uint64              hop_end_ts;
++    boolean             processed;
++    uint32_t            hop_node_ip;
++    tg_timerhandle_t    timeout_timer;
++    tg_timerhandle_t    interval_timer;
++#ifdef ITR_EXT_DEBUG
++    tg_timerhandle_t    fake_timer;
++#endif
++    per_hop_status_t    hop_status;
++    uint32_t            src_port;
++    uint32_t            dst_port;
++    itr_ext_config_t    *my_cfg;
++    itr_ext_input_t     *my_input;
++}itr_ext_per_hop_info_t;
++
++typedef struct itr_ext_val_ {
++    uint32_t            current_ttl;
++    GList               *probe_list;
++    uint16              path_num;
++    boolean             path_complt;
++    ht_path_status_t    path_status;
++    itr_ext_tcp_state_t tcp_sta;
++#ifdef ITR_EXT_DEBUG
++    boolean             cfg_info_dumped;
++#endif
++}itr_ext_val_t;
++
++typedef struct itr_ext_ht_t_ {
++    itr_ext_key_t       itr_ext_key;      // Key
++    dbly_linkage_t      itr_ext_ht_links; // Link
++    itr_ext_val_t       itr_ext_val;      // Value 
++}itr_ext_ht_entry_t;
++
++
++// Itrace ht for external probes
++HT_DEFINE(itr_ext_ht_entry_t, itr_ext_key_t, itr_ext_ht_links, itr_ext_ht);
++
++// TODO : Jalaja
++typedef struct itr_ext_rx_packet_ {
++    itr_prot_type_t     prot;
++    uint32              node_ip;
++    uint32              batch_id;
++    uint32              ttl;
++    uint16              path_num;
++    uint8               vpc_bit;
++    uint8               magic_number;
++    five_tuple_info_t   five_tuple_info;
++    union {
++        itr_ext_icmp_type_t icmp_type;
++    } icmp_i;
++    union {
++        itr_ext_tcp_type_t  tcp_type;
++    } tcp_i;
++} itr_ext_rx_packet_t;
++
++
++#ifdef ITR_EXT_DEBUG
++
++syserr_t
++itr_ext_prober_process_hop_fake_timer (itr_ext_per_hop_info_t *hop_info);
++
++void 
++itr_ext_dump_cfg_ht_hop(itr_ext_per_hop_info_t *hop_info);
++
++void 
++itr_ext_dump_hop(itr_ext_ht_entry_t *ht_entry, 
++                 itr_ext_per_hop_info_t *hop_info, 
++                 itr_ext_input_t *input);
++
++syserr_t
++itr_ext_prober_process_hop_fake_timer (itr_ext_per_hop_info_t *hop_info);
++
++void 
++itr_ext_dump_rx_pkt(itr_ext_rx_packet_t *fake_rx_pkt);
++
++syserr_t
++itr_ext_debug_populate_cfg_from_itr_in(itr_input_t* itr_in,
++                                       itr_ext_config_t *itr_ext_config);
++
++
++#define ITR_EXT_PRINT(format, args...)                              \
++    if (itr_ext_fp == NULL) {                                       \
++        itr_ext_fp = fopen("/var/tmp/itr_ext", "a+");   \
++    }                                                               \
++    fprintf(itr_ext_fp, format"\n", ##args);                        \
++    fflush(itr_ext_fp);
++
++#else 
++#define ITR_EXT_PRINT(format, args...) 
++#endif
++
++
+ typedef struct {
+     uint64 start_ts; // start timestamp
+     char tenant[ITR_MAX_VRF_NAME_LEN];
+@@ -197,12 +438,35 @@
+ itr_find_or_create_exec (const PriKey* prikey, uint16 retention_sz, 
+         bool clear_rslt_buf);
+ 
++syserr_t
++itr_ext_send_next_probe(itr_ext_per_hop_info_t *hop_info); 
++
++void
++itr_ext_process_path_complete(itr_ext_per_hop_info_t *hop_info,
++                              itr_ext_ht_entry_t *ht_entry,
++                              ht_path_status_t path_status);
++
++syserr_t
++itr_ext_validate_rx_pkt(itr_ext_rx_packet_t *itr_ext_rx_packet);
++
++syserr_t
++itr_ext_catcher_get_ht_hop_info_frm_pkt(itr_ext_rx_packet_t *itr_ext_rx_packet,
++                                        itr_ext_ht_entry_t **ht_entry,
++                                        itr_ext_per_hop_info_t **hop_info);
++
++itr_ext_batch_t *
++itr_ext_get_batch_from_id(uint32_t batch_id);
++
+ #define FAILURE -1
+ 
+ // wait time for probe of one batch. 
+ #define ITR_BATCH_MAX_WAIT_TIME_SEC 6 
+ #define ITR_BATCH_MAX_WAIT_TIME_USEC 0
+ 
++//wait time per ttl
++#define ITR_EXT_DEF_PER_TTL_TIMEOUT_SEC 2
++#define ITR_EXT_DEF_PER_TTL_TIMEOUT_USEC 0
++
+ #define ntohll(x) (((uint64)(ntohl((uint32)((x << 32) >> 32))) << 32) | (uint32)ntohl(((uint32)(x >> 32))))
+ 
+ #define htonll(x) ntohll(x)
+@@ -212,4 +476,30 @@
+ void
+ itr_add_task_queue (oam_task_type_t type, const PriKey* exec_prikey);
+ 
++uint16 itr_get_src_port_from_path_num(uint16 path_id);
++
++syserr_t
++itr_initialize_tables();
++
++syserr_t
++itr_init_ht(ht_t *itr_ext_batch_ht);
++
++void 
++itr_debug_print_five_tuple_info(five_tuple_info_t *info);
++
++itr_ext_batch_t *
++itr_ext_get_batch_frm_hop_inf(itr_ext_per_hop_info_t *hop_info);
++
++syserr_t
++itr_ext_prober_process_per_ttl_timeout (itr_ext_per_hop_info_t *hop_info);
++
++syserr_t
++itr_ext_prober_process_per_ttl_timeout (itr_ext_per_hop_info_t *hop_info);
++
++itr_ext_ht_entry_t *
++itr_ext_lookup_ht_entry(itr_ext_per_hop_info_t *hop_info);
++
++itr_ext_per_hop_info_t *
++itr_ext_get_hop_info_by_ttl(GList *probe_glist, uint32 ttl);
++
+ #endif // __ITR_H__
+
+Index: feature/oam/server/itr_catcher.c
+===================================================================
+--- server/.CC/cache/itr_catcher.c@@/main/antares/amazon2/2	2014-12-03 14:49:17.000000000 -0800
++++ server/itr_catcher.c	2014-12-09 05:06:06.000000000 -0800
+@@ -535,3 +535,421 @@
+ 
+     return SUCCESS;
+ }
++
++
++
++
++gint 
++itr_ext_hop_compare_hop_info (gconstpointer a, gconstpointer b) 
++{
++    itr_ext_per_hop_info_t *hop_a = (itr_ext_per_hop_info_t *)a;
++    itr_ext_per_hop_info_t *hop_b = (itr_ext_per_hop_info_t *)b;
++
++    if (hop_a->my_ttl == hop_b->my_ttl) {
++        return 0;
++    }
++
++    if (hop_a->my_ttl < hop_b->my_ttl) {
++        return -1;
++    } 
++
++    return 1;
++}
++
++itr_ext_per_hop_info_t *
++itr_ext_get_hop_info_by_ttl(GList *probe_glist, uint32 ttl)
++{
++    itr_ext_per_hop_info_t  hop_search_info;
++
++    if (!probe_glist) {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "ht_entry has no entries in glist");
++        return NULL;
++    }
++
++    memset(&hop_search_info, 0, sizeof(itr_ext_per_hop_info_t));
++    hop_search_info.my_ttl = ttl;
++    GList *probe_entry = g_list_find_custom(
++                                g_list_first(probe_glist),
++                                &hop_search_info, itr_ext_hop_compare_hop_info);
++    if (!probe_entry) {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "glist entry not found");
++        return NULL;
++    }
++
++    return ((itr_ext_per_hop_info_t *) probe_entry->data); 
++}
++
++int
++itr_ext_process_tcp_packet(itr_ext_rx_packet_t *itr_ext_rx_packet,
++                            itr_ext_ht_entry_t *ht_entry,
++                            itr_ext_per_hop_info_t *hop_info)
++{
++    if ((hop_info->my_cfg->trace_cfg.prot) != ITR_PROT_TCP) {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Didnt expect tcp packets");
++        return -1; // Error
++    }
++
++    if (itr_ext_rx_packet->tcp_i.tcp_type == ITR_EXT_TCP_TYPE_ACK) {
++        ht_entry->itr_ext_val.tcp_sta = ITR_EXT_TCP_ST_ACKED;
++        // TODO - jalaja - need to start tcp state machine
++        // Wait for timer first before sending next probe
++        // Or for now mark it as complete ??
++    }
++    else if (itr_ext_rx_packet->tcp_i.tcp_type == ITR_EXT_TCP_TYPE_RST) {
++        ht_entry->itr_ext_val.tcp_sta = ITR_EXT_TCP_ST_RST;
++        /// Mark the path as complete
++    }
++    else {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Invalid tcp type");
++        return -1; // Error
++    }
++
++    return 0;
++}
++
++int
++itr_ext_process_icmp_packet(itr_ext_rx_packet_t *itr_ext_rx_packet,
++                            itr_ext_ht_entry_t *ht_entry,
++                            itr_ext_per_hop_info_t *hop_info)
++{
++    boolean                 start_timer = FALSE;
++    uint32                  next_ttl;
++    uint64                  probe_int_ttl_sec, probe_int_ttl_usec;
++    uint64                  hop_rt_ms, hop_rt_tot_usec, hop_rt_sec, hop_rt_usec;
++    itr_ext_config_t        *itr_ext_config;
++    struct timeval          timeout;
++
++    /* Following 2 attributes already updated in :
++     * itr_ext_handle_pkt_rx 
++     * - hop_info->hop_end_ts = itr_get_cur_timestamp();
++     * - hop_info->processed  = TRUE;
++    */
++    hop_info->hop_node_ip   = itr_ext_rx_packet->node_ip;
++    hop_info->hop_status    = HOP_STATUS_SUCCESS; 
++    itr_ext_config          = hop_info->my_cfg;
++    probe_int_ttl_sec       = itr_ext_config->trace_cfg.probe_int_ttl_sec;
++    probe_int_ttl_usec      = itr_ext_config->trace_cfg.probe_int_ttl_usec;
++    next_ttl                = hop_info->my_ttl + 1;
++
++    ITR_DEBUG_PRINT(DBG_ITR_TRACE, "Probe rcvd ttl: %d. src_port: %d "
++            "dst_port: %d. Procesing icmp type %d", hop_info->my_ttl, 
++            hop_info->src_port, hop_info->dst_port, 
++            itr_ext_rx_packet->icmp_i.icmp_type);
++
++    // Max hop check applies only to probe timeouts and ttl exp
++    if (itr_ext_rx_packet->icmp_i.icmp_type == ITR_EXT_ICMP_TYPE_TTL_EXP) {
++        // Check if we can send the packet now if TTL max hop not reached
++        if (next_ttl > itr_ext_config->trace_cfg.max_hops) {
++            itr_ext_process_path_complete(hop_info, ht_entry, HT_STA_PTH_INC);
++            return 1; // Path finished
++        }
++        else {
++            hop_rt_ms       = (hop_info->hop_end_ts - hop_info->hop_start_ts);
++            hop_rt_tot_usec = hop_rt_ms * 1000;
++            hop_rt_sec      = (hop_rt_tot_usec / 1000000); 
++            hop_rt_usec     = (hop_rt_tot_usec % 1000000); 
++            start_timer     = itr_check_get_timer_diff(hop_rt_sec, hop_rt_usec,
++                                        probe_int_ttl_sec, probe_int_ttl_usec,
++                                        &timeout);
++            if (start_timer) {
++                ITR_DEBUG_PRINT(DBG_ITR_TRACE, "starting timer for %lu.%d", 
++                        (unsigned long)timeout.tv_sec, (int)timeout.tv_usec);
++                if (tg_start_timer(hop_info->interval_timer, 
++                                   &timeout) != TG_TIMER_STARTED) {
++                    ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Unable to start ttl timer");
++                    return -1; // Error
++                }
++            }
++            else {
++                ITR_DEBUG_PRINT(DBG_ITR_TRACE, "Sending next probe"); 
++                if (itr_ext_send_next_probe(hop_info) != SUCCESS) {
++                    ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Error sending nxt probe");
++                    return -1; // Error
++                }
++            }
++
++            return 0; // Path not yet finished
++        }
++    }
++    else if (itr_ext_rx_packet->icmp_i.icmp_type == ITR_EXT_ICMP_TYPE_INF_REP) {
++        // This is the final packet in ICMP seq
++        ITR_DEBUG_PRINT(DBG_ITR_TRACE, "Got info rep... marking path complete"); 
++        itr_ext_process_path_complete(hop_info, ht_entry, HT_STA_PTH_CMP);
++        return 1;
++    }
++    else if (itr_ext_rx_packet->icmp_i.icmp_type == ITR_EXT_ICMP_TYPE_PORT_UNR) {
++        // This is the final packet in TCP/UDP sequence
++        // Special case TCP where if we are service 
++        // pinging, port unr needs to be flagged
++        if ((hop_info->my_cfg->trace_cfg.prot) == ITR_PROT_TCP) {
++            ht_entry->itr_ext_val.tcp_sta = ITR_EXT_TCP_ST_PRT_UNR;
++        }
++        itr_ext_process_path_complete(hop_info, ht_entry, HT_STA_PTH_CMP);
++        return 1;
++    }
++    else {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Invalid icmp type");
++        return -1;
++    }
++
++    return 0;
++
++}
++
++int
++itr_ext_process_prot_pkt(itr_ext_rx_packet_t *itr_ext_rx_packet,
++                         itr_ext_ht_entry_t *ht_entry,
++                         itr_ext_per_hop_info_t *hop_info)
++{
++    switch(itr_ext_rx_packet->prot) {
++        case ITR_PROT_TCP:
++            return (itr_ext_process_tcp_packet(itr_ext_rx_packet, ht_entry, 
++                                               hop_info));
++            break;
++        case ITR_PROT_ICMP:
++            return (itr_ext_process_icmp_packet(itr_ext_rx_packet, ht_entry, 
++                                                hop_info));
++        default:
++            return -1;
++    }
++
++}
++
++syserr_t
++itr_ext_handle_pkt_rx(itr_ext_rx_packet_t *itr_ext_rx_packet)
++{
++    /* Encoded info returned :
++     * (1) Batch_id (10 bits)
++     * (2) Path id (8 bits) -> idx to batch->ext_path 
++     * (3) TTL (8 bits)
++     * (4) VPC bit (1 bit)
++     * (5) magic number (6 bits)
++     * Total = 32 bits encoded
++     */
++    itr_ext_ht_entry_t      *ht_entry;
++    itr_ext_per_hop_info_t  *hop_info;
++
++    ITR_DEBUG_PRINT(DBG_ITR_TRACE, "handling rx pkt"); 
++
++    /*********************(1) Packet validation *****************************/
++    if (itr_ext_validate_rx_pkt(itr_ext_rx_packet) != SUCCESS) {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Err while validating pkt");
++        return FAILURE;
++    }
++
++    ITR_DEBUG_PRINT(DBG_ITR_TRACE, "Pkt validated"); 
++    /************************************************************************/
++    /*********(2) Check if we need to send packet to peer********************/
++    if (itr_ext_rx_packet->vpc_bit == 1) {
++        // TODO: Send packet to peer tep ip
++        ITR_DEBUG_PRINT(DBG_ITR_TRACE, "Sending pkt to peer"); 
++        return SUCCESS;
++    }
++
++    ITR_DEBUG_PRINT(DBG_ITR_TRACE, "Pkt not for peer"); 
++    /************************************************************************/
++    /*************************(2) Retrieve info *****************************/
++    if (itr_ext_catcher_get_ht_hop_info_frm_pkt(itr_ext_rx_packet, 
++                                                &ht_entry, 
++                                                &hop_info) != SUCCESS) {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Err while trying to get info from pkt");
++        return FAILURE;
++    }
++
++    ITR_DEBUG_PRINT(DBG_ITR_TRACE, "Pkt info rcvd"); 
++
++    if (hop_info->processed) {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "hop already processed");
++        return FAILURE;
++    }
++
++    // Update end ts and status immediately
++    hop_info->hop_end_ts = itr_get_cur_timestamp();
++    hop_info->processed  = TRUE;
++
++
++    /************************************************************************/
++    /*************************(3) Process pkt *****************************/
++    int ret;
++    ITR_DEBUG_PRINT(DBG_ITR_TRACE, "process_prot_pkt ttl: %d src_port: %d "
++                                   "dst_port: %d", hop_info->my_ttl,
++                                   hop_info->src_port, hop_info->dst_port); 
++    ret = itr_ext_process_prot_pkt(itr_ext_rx_packet, ht_entry, hop_info); 
++    if (ret == 0) {
++        // Path not finished yet
++    }
++    else if (ret == 1) { 
++        // Path finished
++    }
++    else {
++        // Error
++    }
++    /************************************************************************/
++
++    return SUCCESS;
++}
++
++syserr_t
++itr_ext_catcher_get_ht_hop_info_frm_pkt(itr_ext_rx_packet_t *itr_ext_rx_packet,
++                                        itr_ext_ht_entry_t **ht_entry,
++                                        itr_ext_per_hop_info_t **hop_info)
++{
++    uint32_t                batch_id, ttl, bt_tep_ip;
++    uint16                  path_num;
++    itr_ext_batch_t         *batch;
++    itr_ext_key_t           ht_key;
++
++    batch_id        = itr_ext_rx_packet->batch_id;
++    ttl             = itr_ext_rx_packet->ttl; 
++    path_num        = itr_ext_rx_packet->path_num;
++    batch           = itr_ext_get_batch_from_id(batch_id);
++    bt_tep_ip       = batch->ext_path[path_num].bt_tep_ip;
++
++    // Batch validation
++    if (!batch->in_use) {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Batch invalid");
++        return FAILURE;
++    }
++
++    // Build ht key and lookup the ht_entry
++    memset(&ht_key, 0, sizeof(itr_ext_key_t));
++    memcpy(&ht_key.five_tuple_info, &itr_ext_rx_packet->five_tuple_info,
++           sizeof(itr_ext_key_t));
++    ht_key.bt_tep_ip = bt_tep_ip;
++
++    *ht_entry = itr_ext_ht_lookup(&batch->itr_ext_batch_ht, &ht_key);
++    if (*ht_entry == NULL) {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "ht_entry not found");
++        return FAILURE;
++    }
++
++    itr_debug_print_five_tuple_info(
++                            &((*ht_entry)->itr_ext_key.five_tuple_info));
++
++    // Next lookup the hop info within the ht_entry
++    *hop_info = itr_ext_get_hop_info_by_ttl((*ht_entry)->itr_ext_val.probe_list, 
++                                           ttl);
++    if (*hop_info == NULL) {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "hop_info not found");
++        return FAILURE;
++    }
++
++    return SUCCESS;
++}
++
++syserr_t
++itr_ext_validate_rx_pkt(itr_ext_rx_packet_t *itr_ext_rx_packet)
++{
++    itr_ext_icmp_type_t     icmp_type;
++    itr_ext_tcp_type_t      tcp_type;
++
++    if (itr_ext_rx_packet->magic_number != ITR_EXT_PROBE_SIGNATURE) {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Magic number mismatch");
++        return FAILURE;
++    }
++
++    // we expect icmp or tcp packets only
++    switch(itr_ext_rx_packet->prot) {
++        case ITR_PROT_TCP:
++            tcp_type = itr_ext_rx_packet->tcp_i.tcp_type;
++            if ((tcp_type != ITR_EXT_TCP_TYPE_ACK) &&
++                (tcp_type != ITR_EXT_TCP_TYPE_RST)) {
++                ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Unknown tcp type %d", tcp_type);
++                return FAILURE;
++            }
++            break;
++        case ITR_PROT_ICMP:
++            icmp_type = itr_ext_rx_packet->icmp_i.icmp_type;
++            if ((icmp_type != ITR_EXT_ICMP_TYPE_TTL_EXP) &&
++                (icmp_type != ITR_EXT_ICMP_TYPE_INF_REP) &&
++                (icmp_type != ITR_EXT_ICMP_TYPE_PORT_UNR)) {
++                ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Unknown icmp type %d", icmp_type);
++                return FAILURE;
++            }
++            break;
++        default:
++            ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Unknown packet type");
++            return FAILURE;
++    }
++
++    return SUCCESS;
++}
++
++#ifdef ITR_EXT_DEBUG
++extern FILE *itr_ext_fp;
++syserr_t
++itr_ext_prober_process_hop_fake_timer (itr_ext_per_hop_info_t *hop_info)
++{
++    itr_ext_rx_packet_t     fake_rx_pkt;
++    itr_ext_input_t         *input;
++    itr_ext_ht_entry_t      *ht_entry;
++    ext_trace_cfg_t         *trace_cfg;
++    static int              hop_count = 0;
++
++    ITR_DEBUG_PRINT(DBG_ITR_TRACE, "fake timer ttl: %d src_port: %d "
++                                   "dst_port: %d", hop_info->my_ttl,
++                                   hop_info->src_port, hop_info->dst_port); 
++
++    trace_cfg       = &hop_info->my_cfg->trace_cfg;    
++    input           = hop_info->my_input;
++    ht_entry        = itr_ext_lookup_ht_entry(hop_info);
++
++    // destroy interval timer
++    tg_destroy_timer(hop_info->fake_timer);
++
++    fake_rx_pkt.prot                    = ITR_PROT_ICMP;
++    fake_rx_pkt.node_ip                 = 0xa010203; 
++    fake_rx_pkt.batch_id                = input->batch_id; 
++    fake_rx_pkt.ttl                     = hop_info->my_ttl; 
++    fake_rx_pkt.path_num                = ht_entry->itr_ext_val.path_num;  
++    fake_rx_pkt.vpc_bit                 = 0; 
++    fake_rx_pkt.magic_number            = ITR_EXT_PROBE_SIGNATURE; 
++    fake_rx_pkt.five_tuple_info.src_ip  = trace_cfg->src_ip; 
++    fake_rx_pkt.five_tuple_info.dst_ip  = trace_cfg->dst_ip; 
++    fake_rx_pkt.five_tuple_info.src_port = hop_info->src_port;  
++    fake_rx_pkt.five_tuple_info.dst_port = hop_info->dst_port;
++    fake_rx_pkt.five_tuple_info.prot     = trace_cfg->prot; 
++    if (hop_count < 3) {
++        fake_rx_pkt.icmp_i.icmp_type         = ITR_EXT_ICMP_TYPE_TTL_EXP; 
++    }
++    else {
++        fake_rx_pkt.icmp_i.icmp_type         = ITR_EXT_ICMP_TYPE_INF_REP;
++    }
++    hop_count++;
++
++    itr_ext_dump_rx_pkt(&fake_rx_pkt);
++    if (itr_ext_handle_pkt_rx(&fake_rx_pkt) != SUCCESS) {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Error while handling rx pkt");
++    }
++
++    return SUCCESS;
++}
++
++void 
++itr_ext_dump_rx_pkt(itr_ext_rx_packet_t *fake_rx_pkt)
++{
++        ITR_EXT_PRINT("*********** Rx_pkt ***********");
++
++        ITR_EXT_PRINT("prot:            %d", fake_rx_pkt->prot);
++        ITR_EXT_PRINT("node_ip:         %s", 
++                       ip_print_addr(fake_rx_pkt->node_ip));
++        ITR_EXT_PRINT("batch_id:        %d", fake_rx_pkt->batch_id);
++        ITR_EXT_PRINT("ttl:             %d", fake_rx_pkt->ttl);
++        ITR_EXT_PRINT("path_num:        %d", fake_rx_pkt->path_num);
++        ITR_EXT_PRINT("vpc_bit:         %d", fake_rx_pkt->vpc_bit);
++        ITR_EXT_PRINT("magic_number:    %d", fake_rx_pkt->magic_number);
++        ITR_EXT_PRINT("src_ip:          %s", 
++                       ip_print_addr(fake_rx_pkt->five_tuple_info.src_ip));
++        ITR_EXT_PRINT("dst_ip:          %s", 
++                       ip_print_addr(fake_rx_pkt->five_tuple_info.dst_ip));
++        ITR_EXT_PRINT("src_prt:         %d", 
++                       fake_rx_pkt->five_tuple_info.src_port);
++        ITR_EXT_PRINT("src_prt:         %d", 
++                      fake_rx_pkt->five_tuple_info.dst_port);
++        ITR_EXT_PRINT("prot:            %d", fake_rx_pkt->five_tuple_info.prot);
++        ITR_EXT_PRINT("icmp_type:       %d", (int)fake_rx_pkt->icmp_i.icmp_type);
++
++        return;
++}
++
++#endif
+
+Index: feature/oam/server/itr_packet.c
+===================================================================
+--- server/.CC/cache/itr_packet.c@@/main/antares/amazon2/2	2014-12-03 14:49:17.000000000 -0800
++++ server/itr_packet.c	2014-12-05 16:58:01.000000000 -0800
+@@ -170,6 +170,20 @@
+ extern uint16 
+ itr_get_srcport (uint16 path_id);
+ 
++uint16 itr_get_port_from_path_num(uint16 path_id)
++{
++    uint16 src_port, running_part;
++
++    running_part = itr_get_srcport(path_id);
++
++    src_port = ITR_UDP_SRC_PORT_MAGGIC_NUMBER;
++    src_port = src_port << 12;
++    src_port = src_port & 0xf000;
++    src_port = src_port | running_part;
++
++    return src_port;
++}
++
+ // construct UDP header except fill in checksum.
+ // path_id: used to generate different source port. 
+ void 
+@@ -179,15 +193,9 @@
+     itr_udphdrtype_t *udp_hdr = (itr_udphdrtype_t*)udp_hdr_ptr;
+     bzero(udp_hdr, sizeof(itr_udphdrtype_t));
+ 
+-    uint16 src_port, running_part;
+-    //running_part = ITR_UDP_SRC_PORT_RUNNING_BASE + path_id;
+-    //running_part = running_part & 0x0fff;
+-    running_part = itr_get_srcport(path_id);
++    uint16 src_port;
+ 
+-    src_port = ITR_UDP_SRC_PORT_MAGGIC_NUMBER;
+-    src_port = src_port << 12;
+-    src_port = src_port & 0xf000;
+-    src_port = src_port | running_part;
++    src_port = itr_get_port_from_path_num(path_id);
+     *sport_num = src_port;
+ 
+     udp_hdr->sport = htons(src_port);
+
+Index: feature/oam/server/itr_packet.h
+===================================================================
+--- server/.CC/cache/itr_packet.h@@/main/antares/6	2014-12-03 14:49:17.000000000 -0800
++++ server/itr_packet.h	2014-12-05 16:58:00.000000000 -0800
+@@ -81,6 +81,7 @@
+ 
+ // A magic number put at the first 4 bytes of UDP probe packets. 
+ #define ITR_UDP_PROBE_SIGNATURE 2718281828
++#define ITR_EXT_PROBE_SIGNATURE 36 // = 0x24 = 100100 (6 bits of magic encoded)
+ 
+ #define ITR_MAX_IP_PKT_LEN 65535
+ #define ITR_MAX_IP_PLD_LEN (65535 - 20)
+@@ -129,6 +130,8 @@
+ extern syserr_t
+ itr_wrapup_send_resp_pkt (resp_pkt_info_t* pkt_info);
+ 
++uint16 itr_get_port_from_path_num(uint16 path_id);
++
+ // The following data structure are for constructing response packet. 
+ 
+ #define ITR_RESPONSE_MTU 1500
+@@ -156,6 +159,7 @@
+ #define ITR_IP_HDR_IDENT_LOCAL_TEP_IP_ID_BIT_NUM 2
+ // Mask out highest two bits. 
+ #define ITR_BATCH_ID_MASK 0x3fff
++#define ITR_EXT_BATCH_ID_MASK 0x3ff
+ #define ITR_LOCAL_TEP_IP_COMP_MASK 0x0003
+ 
+ // ICMP type and code
+
+Index: feature/oam/server/itr_prober.c
+===================================================================
+--- server/.CC/cache/itr_prober.c@@/main/antares/12	2014-12-03 14:49:17.000000000 -0800
++++ server/itr_prober.c	2014-12-09 05:02:04.000000000 -0800
+@@ -2,10 +2,15 @@
+ #include "itr_util.h"
+ #include "isan/types.h"
+ #include "itr_packet.h"
++#include <math.h>
+ 
+ // Recording sending out probe packets as well as rslts for each batch. 
+ GList* probe_batch_records = NULL;
+ 
++#ifdef ITR_EXT_DEBUG
++FILE *itr_ext_fp = NULL;
++#endif
++
+ // get the batch by batch_id. 
+ probe_batch_rec_t* 
+ itr_probe_get_batch_rec_by_id (uint16 batch_id)
+@@ -207,6 +212,464 @@
+     return err;
+ }
+ 
++syserr_t
++itr_send_ivxlan_packet_to_lasthop(const itr_ext_input_t *input)
++{
++    return SUCCESS;
++}
++
++// Fabricate and send out external probe packet. 
++syserr_t 
++itr_ext_setup_probe (itr_ext_config_t *itr_ext_config, 
++                     itr_ext_input_t *input,
++                     uint32_t src_port, uint32_t dst_port) 
++{
++    uint32_t            batch_id, path_num;
++    itr_ext_batch_t     *batch;
++
++    /**********************  (1) Get the batch first ************************/
++    // only keep the lower 14 bits. 
++    batch_id    = input->batch_id & ITR_EXT_BATCH_ID_MASK;
++    batch       = &itr_ext_global_info.itr_ext_batch[batch_id];
++    path_num    = batch->num_paths;
++
++    if (path_num >= MAX_EXT_PATH) {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Exceeded supported max number of paths "
++                                "per batch. Num Paths = %d", batch->num_paths);
++        return FAILURE;
++    }
++
++    ITR_DEBUG_PRINT(DBG_ITR_TRACE, "batch = %d", batch_id);
++
++    /************************************************************************/
++    /*************** (2) Init the ht in the batch if not done already *******/
++    if (batch->ht_state != ITR_EXT_HT_INITED) { 
++        if (itr_init_ht(&batch->itr_ext_batch_ht) != SUCCESS) {
++            ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Error while trying to init ht");
++            return FAILURE;
++        }
++        else {
++            batch->ht_state = ITR_EXT_HT_INITED;
++        }
++    }
++    /************************************************************************/
++    /** (3) First lookup the ht entry. Add only if it hasnt been added yet **/
++    itr_ext_key_t           ht_key;
++    itr_ext_ht_entry_t      *ht_entry = NULL;
++
++    // Build the key
++    memset(&ht_key, 0, sizeof(itr_ext_key_t));
++    ht_key.five_tuple_info.src_ip       = itr_ext_config->trace_cfg.src_ip;
++    ht_key.five_tuple_info.dst_ip       = itr_ext_config->trace_cfg.dst_ip;
++    ht_key.five_tuple_info.src_port     = src_port;
++    ht_key.five_tuple_info.dst_port     = dst_port;
++    ht_key.five_tuple_info.prot         = itr_ext_config->trace_cfg.prot;
++    ht_key.bt_tep_ip                    = input->bt_tep_ip;
++
++    // Do a lookup to veriy if entry exists
++    ht_entry = itr_ext_ht_lookup(&batch->itr_ext_batch_ht, &ht_key);
++    if (ht_entry != NULL) {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "HT entry found while setting probe");
++        itr_debug_print_five_tuple_info(
++                                &ht_entry->itr_ext_key.five_tuple_info);
++        return FAILURE;
++    }
++    else {
++
++        ht_entry = (itr_ext_ht_entry_t *)OAM_MALLOC(sizeof(itr_ext_ht_entry_t), 
++                                                    OAM_MEM_ext_ht_entry_t);
++        if (ht_entry == NULL) {
++            ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Error during malloc of ht_entry");
++            return FAILURE;
++        }
++        memset(ht_entry, 0, sizeof(itr_ext_ht_entry_t));
++
++        // Copy the key
++        //memcpy(&ht_entry->itr_ext_key, &ht_key, sizeof(itr_ext_key_t));
++        ht_entry->itr_ext_key = ht_key;
++        ht_entry->itr_ext_val.path_num      = path_num;
++        if (itr_ext_config->trace_cfg.prot == ITR_PROT_TCP) {
++            ht_entry->itr_ext_val.tcp_sta   = ITR_EXT_TCP_ST_INITED;
++        }
++    }
++
++    /************************************************************************/
++    /********** (4) Update batch and insert ht entry ************************/
++
++    // Using the path_num as idx, copy the path entry into the batch
++    // In the response packet, we would use this as index to form following  
++    // round packets.
++    batch->ext_path[path_num].bt_tep_ip = input->bt_tep_ip; 
++
++    // Add it to ht
++    if (!itr_ext_ht_insert(&batch->itr_ext_batch_ht, ht_entry, NULL)) {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Failed to add to ht");
++        goto FREE_AND_RET_ERR;
++    }
++
++    batch->num_paths++;
++    /************************************************************************/
++    
++    return SUCCESS;
++
++FREE_AND_RET_ERR:
++    if (ht_entry != NULL) {
++        OAM_FREE(ht_entry);
++    }
++    return FAILURE;
++}
++
++syserr_t 
++itr_ext_start_probe (itr_ext_config_t *itr_ext_config, 
++                     itr_ext_input_t *input,
++                     itr_ext_ht_entry_t *ht_entry)
++{
++    uint32_t            batch_id;
++    itr_ext_batch_t     *batch;
++
++    /**********************  (1) Get the batch first ************************/
++    // only keep the lower 14 bits. 
++    batch_id    = input->batch_id & ITR_EXT_BATCH_ID_MASK;
++    batch       = &itr_ext_global_info.itr_ext_batch[batch_id];
++
++    if (batch->ht_state != ITR_EXT_HT_INITED) {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "HT not inited");
++        return FAILURE;
++    }
++
++    ITR_DEBUG_PRINT(DBG_ITR_TRACE, "Beg ext traceroute(batch = %d)", batch_id);
++
++    /************************************************************************/
++    /************************* (2) Send packet ******************************/
++    uint32_t                next_ttl;
++    uint8                   magic_number;
++
++    // TODO: generate the magic number per probe
++    magic_number    = ITR_EXT_PROBE_SIGNATURE;
++    next_ttl        = ht_entry->itr_ext_val.current_ttl + 1;
++
++    // Send packet before adding to ht/batch/glist/incrementing ttl. 
++    // batch_id and path_num to be encoded
++    // TODO - Jalaja. 
++    /*
++    l3vm_context_info_t ctx_info;
++    vnid_t              vrf_vnid;
++    if (itr_ext_get_ctx_info_from_ctx_name(itr_ext_config->trace_cfg.vrf_name, 
++                                           &ctx_info) != SUCCESS) {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Error while getting vrf encap");
++        return FAILURE;
++    }
++    vrf_vnid = ctx_info.encap.v.vnid;
++    if (itr_send_ivxlan_packet_to_lasthop(itr_ext_config, input, 
++                                          path_num, batch_id, vrf_vnid,
++                                          next_ttl, magic_number) != SUCCESS) {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Packet send failed");
++        return FAILURE;
++    }
++    */
++
++    /************************************************************************/
++    /********************** (3) Populate hop_info ***************************/
++    itr_ext_per_hop_info_t  *hop_info = NULL; 
++    uint32_t                src_port, dst_port;
++    struct timeval          timeout;
++
++    itr_debug_print_five_tuple_info(
++            &ht_entry->itr_ext_key.five_tuple_info);
++
++    src_port = ht_entry->itr_ext_key.five_tuple_info.src_port;
++    dst_port = ht_entry->itr_ext_key.five_tuple_info.dst_port;
++
++    hop_info = (itr_ext_per_hop_info_t *)OAM_MALLOC(sizeof(itr_ext_per_hop_info_t),
++                                                    OAM_MEM_ext_hop_info_t);
++    if (hop_info == NULL) {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Error during malloc of hop_info");
++        return FAILURE;
++    }
++
++    ht_entry->itr_ext_val.current_ttl = next_ttl;
++    hop_info->my_ttl        = ht_entry->itr_ext_val.current_ttl;
++    hop_info->hop_start_ts  = itr_get_cur_timestamp();
++    hop_info->src_port      = src_port;
++    hop_info->dst_port      = dst_port;
++    hop_info->timeout_timer = tg_create_timer(tg_handle, 
++                                    ITR_EXT_PER_HOP_TIMEOUT_TIMER, 
++                                    (void*)hop_info, 0);
++    hop_info->interval_timer = tg_create_timer(tg_handle, 
++                                    ITR_EXT_INTERVAL_TIMER, 
++                                    (void*)hop_info, 0);
++#ifdef ITR_EXT_DEBUG
++    hop_info->fake_timer    = tg_create_timer(tg_handle, 
++                                    ITR_EXT_HOP_FAKE_TIMER, 
++                                    (void*)hop_info, 0);
++#endif
++    hop_info->my_cfg        = itr_ext_config;
++    hop_info->my_input      = input;
++    hop_info->hop_status    = HOP_STATUS_INITIATED; 
++
++    /************************************************************************/
++    /**************************** (4) Add to ht *****************************/
++
++    ht_entry->itr_ext_val.probe_list = 
++                    g_list_append(ht_entry->itr_ext_val.probe_list, hop_info);
++    if (ht_entry->itr_ext_val.probe_list == NULL) {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "glist_append failed");
++        goto FREE_AND_RET_ERR;
++    }
++
++    /************************************************************************/
++
++    timeout.tv_sec          = itr_ext_config->trace_cfg.per_hop_ttl_sec; 
++    timeout.tv_usec         = itr_ext_config->trace_cfg.per_hop_ttl_usec; 
++
++    ITR_DEBUG_PRINT(DBG_ITR_TRACE, "starting ttl timer for %lu.%d", 
++            (unsigned long)timeout.tv_sec, (int)timeout.tv_usec);
++    if (tg_start_timer(hop_info->timeout_timer, 
++                       &timeout) != TG_TIMER_STARTED) {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Unable to start per ttl timer");
++        goto FREE_AND_RET_ERR;
++    }
++
++#ifdef ITR_EXT_DEBUG
++    timeout.tv_sec          = itr_ext_config->trace_cfg.fake_hop_sec; 
++    timeout.tv_usec         = itr_ext_config->trace_cfg.fake_hop_usec; 
++
++    ITR_DEBUG_PRINT(DBG_ITR_TRACE, "starting fake timer for %lu.%d", 
++            (unsigned long)timeout.tv_sec, (int)timeout.tv_usec);
++    if (tg_start_timer(hop_info->fake_timer, 
++                       &timeout) != TG_TIMER_STARTED) {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Unable to start per ttl timer");
++        goto FREE_AND_RET_ERR;
++    }
++    itr_ext_dump_cfg_ht_hop(hop_info);
++#endif
++    ITR_DEBUG_PRINT(DBG_ITR_TRACE, "probe sent ttl: %d src_port: %d "
++                                   "dst_port: %d", hop_info->my_ttl,
++                                   src_port, dst_port); 
++    
++    return SUCCESS;
++
++FREE_AND_RET_ERR:
++    if (hop_info != NULL) {
++        OAM_FREE(hop_info);
++    }
++    return FAILURE;
++}
++
++void
++itr_ext_validate_get_sport_dport_range (itr_ext_config_t *itr_ext_config)
++{
++    boolean sport_wildcard = FALSE, dport_wildcard = FALSE;
++    uint32  num_sports = 0, num_dports = 0;
++    double np_sqrt;
++
++
++    if ((SPS == 0) && (SPE == 65535)) { // Wild card
++        sport_wildcard = TRUE;
++    }
++    else {
++        num_sports = SPE - SPS +  1;
++    }
++
++    if ((DPS == 0) && (DPE == 65535)) { // Wild card
++        dport_wildcard = TRUE;
++    }
++    else {
++        num_dports = DPE - DPS + 1;
++    }
++
++    if ((sport_wildcard == TRUE) && (dport_wildcard != TRUE)) {
++        // only sport varies
++        SPS = itr_get_port_from_path_num(1);
++        SPE = itr_get_port_from_path_num(NP/num_dports + 1);
++        num_sports = SPE - SPS + 1;
++    }
++    else if ((sport_wildcard != TRUE) && (dport_wildcard == TRUE)) {
++        // only sport varies
++        DPS = itr_get_port_from_path_num(1);
++        DPE = itr_get_port_from_path_num(NP/num_sports + 1);
++        num_dports = DPE - DPS + 1;
++    }
++    else if ((sport_wildcard == TRUE) && (dport_wildcard == TRUE)) {
++        // both sport/dport vary
++        np_sqrt = (int)sqrt((double)NP);
++        SPS = itr_get_port_from_path_num(1);
++        if (np_sqrt > 16382) {
++            // Ephemeral ports range from 49152 - 65535 (Delta = 16383)
++            np_sqrt = 16382;
++        }
++        SPE = itr_get_port_from_path_num(np_sqrt + 1);
++        DPS = itr_get_port_from_path_num(1);
++        DPE = itr_get_port_from_path_num(np_sqrt);
++        num_sports = SPE - SPS + 1;
++        num_dports = DPE - DPS + 1;
++    }
++    else {
++        // both sport and dport fixed range provided 
++    }
++
++    if ((num_sports * num_dports) < NP ) {
++        NP = (num_sports * num_dports);
++    }
++
++    if (NP > MAX_EXT_PATH) {
++        NP = MAX_EXT_PATH;
++    }
++
++    return;
++}
++
++int 
++itr_ext_get_next_available_batch_id()
++{
++    int i;
++
++    for( i = 0; i < MAX_EXT_ITR_BATCHES; i++ ) {
++        if (!itr_ext_global_info.itr_ext_batch[i].in_use) {
++            memset(&itr_ext_global_info.itr_ext_batch[i], 0, 
++                   sizeof(itr_ext_batch_t));
++            itr_ext_global_info.itr_ext_batch[i].in_use = TRUE;
++            return i;
++        }
++    }
++    return -1;
++}
++
++itr_ext_batch_t *
++itr_ext_get_batch_from_id(uint32_t batch_id)
++{
++    uint32_t        id;
++    itr_ext_batch_t *batch;
++
++    id = batch_id & ITR_EXT_BATCH_ID_MASK;
++    if (id >= MAX_EXT_ITR_BATCHES) {
++        return NULL;
++    }
++
++    if (!itr_ext_global_info.itr_ext_batch[id].in_use) {
++        return NULL;
++    }
++
++    batch = &itr_ext_global_info.itr_ext_batch[id];
++
++    return batch;
++
++}
++
++syserr_t
++itr_ext_start_ext_traceroute(itr_ext_config_t *itr_ext_config)
++{
++    uint32_t            num_bts, bt_num, num_paths, path_num = 0, sp, dp;
++    uint32_t            sps, spe, dps, dpe;
++    uint16              batch_id;
++    boolean             one_run_passed = FALSE;
++    itr_ext_input_t     *input;
++    itr_ext_batch_t     *batch;
++    ht_t                *batch_ht;
++    itr_ext_ht_entry_t  *ht_entry;
++    ht_iterator_t       iter;
++
++    if (itr_ext_global_info.num_active_batches > MAX_EXT_ITR_BATCHES) {
++        ITR_DEBUG_PRINT(DBG_ITR_TRACE, "Appending to waitlist");
++        g_list_append(itr_ext_waitlist, itr_ext_config);   
++        return SUCCESS;
++    }
++
++    batch_id = itr_ext_get_next_available_batch_id();
++    if (batch_id == -1) {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "invalid batch id");
++        return FAILURE;
++    }
++
++    itr_ext_global_info.num_active_batches++;
++    itr_ext_validate_get_sport_dport_range(itr_ext_config);
++    num_bts     = itr_ext_config->num_bts;
++    num_paths   = itr_ext_config->num_paths;
++
++    if (num_bts > ITR_EXT_MAX_BTS) {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "exceeded max num of bts");
++        return FAILURE;
++    }
++
++    for (bt_num = 0; bt_num < num_bts; bt_num++) {
++
++        // Malloc input per bt
++        itr_ext_config->input[bt_num] = (itr_ext_input_t *)
++                                            OAM_MALLOC(sizeof(itr_ext_input_t), 
++                                                       OAM_MEM_ext_input_t);
++        input = itr_ext_config->input[bt_num]; 
++        if (input == NULL) {
++            ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Error during malloc of input");
++            return FAILURE;
++        }
++        memset(input, 0, sizeof(itr_ext_input_t));
++
++        input->batch_id = batch_id;
++        input->bt_tep_ip = itr_ext_config->bt_teps[bt_num];
++
++        sps = itr_ext_config->sport_start;
++        spe = itr_ext_config->sport_end;
++        dps = itr_ext_config->dport_start;
++        dpe = itr_ext_config->dport_end;
++        path_num = 0;
++
++        for (dp = dps; dp <= dpe ; dp++) {
++            for (sp = sps; sp <= spe ; sp++) {
++                if (path_num == num_paths) {
++                    ITR_DEBUG_PRINT(DBG_ITR_TRACE, "All paths done"); 
++                    break;
++                }
++
++                if (itr_ext_setup_probe(itr_ext_config, input, 
++                                        sp, dp) != SUCCESS) {
++                    ITR_DEBUG_PRINT(DBG_ITR_ERROR, "setup_probe failed");
++                }
++                else {
++
++                }
++                path_num++;
++            }
++        }
++
++        batch = itr_ext_get_batch_from_id(batch_id);
++        if (batch == NULL) {
++            ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Error fetching batch");
++            return FAILURE;
++        }
++
++        // Add rule before sending packet. Save acl handle in batch
++        // TODO - Ravi 
++        // batch->acl_hndl = itr_ext_add_rule();
++
++        // Walk ht entries setup in itr_ext_setup_probe and start those probes
++        batch_ht = &batch->itr_ext_batch_ht;
++        if (!ht_iterator_init(&iter, batch_ht, 0, 
++                              ht_get_num_buckets(batch_ht))) {
++            ITR_DEBUG_PRINT(DBG_ITR_ERROR, "batch_ht iterator init error");
++            return FAILURE;
++        }
++
++        while ((ht_entry = itr_ext_ht_iterator_next(&iter, NULL))) {
++            if (itr_ext_start_probe(itr_ext_config, 
++                                    input, ht_entry) != SUCCESS) {
++                ITR_DEBUG_PRINT(DBG_ITR_ERROR, "start_probe failed");
++            }
++            else {
++                one_run_passed = TRUE;
++            }
++        }
++
++    }
++
++    // Reset batch in use flag if no probe was sent
++    if (one_run_passed == FALSE) {
++        itr_ext_global_info.itr_ext_batch[batch_id].in_use = FALSE;
++    }
++
++    return SUCCESS;
++    
++}
++
+ // start traceroute. 
+ syserr_t 
+ itr_start_traceroute (itr_input_t* itr_in, itr_meta_data_t* meta_data,
+@@ -218,11 +681,725 @@
+     itr_exec_t* exec = itr_find_or_create_exec(exec_prikey, 
+                 meta_data->retention_sz, FALSE);
+ 
++#if 0
+     if ((err = itr_probe(itr_in, meta_data, lsubj_prikey, exec,
+                     batch_id++)) != SUCCESS) {
+         ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Failed to start traceroute probing");
++    }
++#endif
++
++    ITR_EXT_PRINT("Calling itr_ext_start_ext_traceroute");
++    static int run_once = 0;
++    if (run_once) {
++        ITR_EXT_PRINT("Already run once");
++        return SUCCESS;
++    }
++    run_once = 1;
++
++    itr_ext_config_t *itr_ext_config;
++
++    itr_ext_config = (itr_ext_config_t *)OAM_MALLOC(sizeof(itr_ext_config_t),
++                                                    OAM_MEM_ext_config_t);
++    // TODO : Internal traceroute to populate itr_ext_config
++#ifdef ITR_EXT_DEBUG
++    if (itr_ext_debug_populate_cfg_from_itr_in(itr_in, 
++                                               itr_ext_config) != SUCCESS) {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Error while copying cfg from itr_in");
++        return FAILURE;
++    }
++#endif
++
++    ITR_DEBUG_PRINT(DBG_ITR_TRACE, "Calling itr_ext_start_ext_traceroute"); 
++    if ((err = itr_ext_start_ext_traceroute(itr_ext_config)) != SUCCESS) {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Failed to start traceroute probing");
+         return err;
+     }
+ 
+     return SUCCESS;
+ }
++
++itr_ext_ht_entry_t *
++itr_ext_lookup_ht_entry(itr_ext_per_hop_info_t *hop_info)
++{
++    itr_ext_config_t    *itr_ext_config;
++    itr_ext_input_t     *input;
++    itr_ext_ht_entry_t  *ht_entry = NULL;
++    itr_ext_batch_t     *batch;
++    itr_ext_key_t       ht_key;
++
++    if (hop_info == NULL) {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Hop info  = NULL");
++        return NULL;
++    }
++
++    itr_ext_config  = hop_info->my_cfg;
++    input           = hop_info->my_input;
++    batch           = itr_ext_get_batch_frm_hop_inf(hop_info);
++
++    // Build the key
++    memset(&ht_key, 0, sizeof(itr_ext_key_t));
++    ht_key.five_tuple_info.src_ip       = itr_ext_config->trace_cfg.src_ip;
++    ht_key.five_tuple_info.dst_ip       = itr_ext_config->trace_cfg.dst_ip;
++    ht_key.five_tuple_info.prot         = itr_ext_config->trace_cfg.prot;
++    ht_key.five_tuple_info.src_port     = hop_info->src_port;
++    ht_key.five_tuple_info.dst_port     = hop_info->dst_port;
++    ht_key.bt_tep_ip                    = input->bt_tep_ip;
++
++    // Do a lookup to veriy if entry exists
++    ht_entry = itr_ext_ht_lookup(&batch->itr_ext_batch_ht, &ht_key);
++    if (ht_entry != NULL) {
++        itr_debug_print_five_tuple_info(
++                                &ht_entry->itr_ext_key.five_tuple_info);
++        return ht_entry;
++    }
++    else {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "HT entry not found");
++        return NULL;
++    }
++
++    return NULL;
++
++}
++
++syserr_t
++itr_ext_send_next_probe(itr_ext_per_hop_info_t *hop_info) 
++{
++    itr_ext_config_t    *itr_ext_config;
++    itr_ext_input_t     *input;
++    itr_ext_ht_entry_t  *ht_entry;
++
++    itr_ext_config  = hop_info->my_cfg;
++    input           = hop_info->my_input;
++
++    ITR_DEBUG_PRINT(DBG_ITR_TRACE, "Sending nxt probe ttl: %d src_port: %d "
++                                   "dst_port: %d", hop_info->my_ttl,
++                                   hop_info->src_port, hop_info->dst_port); 
++    ht_entry = itr_ext_lookup_ht_entry(hop_info);
++    if (ht_entry == NULL) {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "ht lookup error");
++        return FAILURE;
++    }
++
++    if (itr_ext_start_probe(itr_ext_config, input, ht_entry) != SUCCESS) {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "itr_ext_start_probe failed.");
++        return FAILURE;
++    }
++
++    return SUCCESS;
++
++}
++
++syserr_t
++itr_ext_handle_int_timeout(itr_ext_per_hop_info_t *hop_info) 
++{
++    // destroy interval timer
++    tg_destroy_timer(hop_info->interval_timer);
++
++    ITR_DEBUG_PRINT(DBG_ITR_TRACE, "interval timeout handler");
++#ifdef ITR_EXT_DEBUG
++    ITR_EXT_PRINT("*********** Interval timeout handler  ***********");
++    itr_ext_dump_cfg_ht_hop(hop_info);
++#endif
++    return (itr_ext_send_next_probe(hop_info));
++}
++
++syserr_t
++itr_ext_prober_process_per_ttl_timeout (itr_ext_per_hop_info_t *hop_info)
++{
++    itr_ext_config_t    *itr_ext_config;
++    uint32_t            next_ttl;
++    uint64              per_hop_ttl_sec, per_hop_ttl_usec;
++    uint64              probe_int_ttl_sec, probe_int_ttl_usec;
++    boolean             start_timer = FALSE;
++    struct timeval      timeout;
++    itr_ext_ht_entry_t  *ht_entry;
++
++    ITR_DEBUG_PRINT(DBG_ITR_TRACE, "TTL timeout handler");
++
++    if (hop_info->processed) {
++        ITR_DEBUG_PRINT(DBG_ITR_TRACE, "Hop already procesed");
++        return SUCCESS;
++    }
++#ifdef ITR_EXT_DEBUG
++    ITR_EXT_PRINT("*********** TTL timeout handler ***********");
++    itr_ext_dump_cfg_ht_hop(hop_info);
++#endif
++
++    itr_ext_config          = hop_info->my_cfg;
++    next_ttl                = hop_info->my_ttl + 1;
++
++    hop_info->hop_end_ts    = itr_get_cur_timestamp();
++    hop_info->hop_node_ip   = ITR_EXT_NODE_IP_WILDCARD;
++    hop_info->hop_status    = HOP_STATUS_FAILURE; 
++    hop_info->processed     = TRUE;
++
++    // destroy timer
++    tg_destroy_timer(hop_info->timeout_timer);
++
++    if (next_ttl > itr_ext_config->trace_cfg.max_hops) {
++
++        ht_entry = itr_ext_lookup_ht_entry(hop_info);
++        if (ht_entry == NULL) {
++            ITR_DEBUG_PRINT(DBG_ITR_ERROR, "ht lookup error");
++            return FAILURE;
++        }
++        itr_ext_process_path_complete(hop_info, ht_entry, HT_STA_PTH_INC);
++
++    }
++    else {
++        // Check if interval timer has elapsed
++        per_hop_ttl_sec         = itr_ext_config->trace_cfg.per_hop_ttl_sec;
++        per_hop_ttl_usec        = itr_ext_config->trace_cfg.per_hop_ttl_usec;
++        probe_int_ttl_sec       = itr_ext_config->trace_cfg.probe_int_ttl_sec;
++        probe_int_ttl_usec      = itr_ext_config->trace_cfg.probe_int_ttl_usec;
++
++        start_timer = itr_check_get_timer_diff(per_hop_ttl_sec, per_hop_ttl_usec,
++                                               probe_int_ttl_sec, probe_int_ttl_usec,
++                                               &timeout);
++        if (start_timer) {
++            ITR_DEBUG_PRINT(DBG_ITR_TRACE, "starting timer for %lu.%d", 
++                    (long unsigned int)timeout.tv_sec, (int)timeout.tv_usec);
++            if (tg_start_timer(hop_info->interval_timer, 
++                               &timeout) != TG_TIMER_STARTED) {
++                ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Unable to start per ttl timer");
++                return FAILURE;
++            }
++        }
++        else {
++            if (itr_ext_send_next_probe(hop_info) != SUCCESS) {
++                ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Error while sending nxt probe");
++                return FAILURE;
++            }
++        }
++
++    }
++
++    return SUCCESS;
++}
++
++boolean
++itr_ext_check_all_paths_completed(itr_ext_per_hop_info_t *hop_info)
++{
++    itr_ext_batch_t     *batch;
++    ht_iterator_t       iter;
++    ht_t                *batch_ht;
++    itr_ext_ht_entry_t  *ht_entry;
++
++    batch       = itr_ext_get_batch_frm_hop_inf(hop_info);
++    if (batch == NULL) {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "start_probe failed");
++        return FAILURE;
++    }
++
++    batch_ht = &batch->itr_ext_batch_ht;
++    if (!ht_iterator_init(&iter, batch_ht, 0, 
++                ht_get_num_buckets(batch_ht))) {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "batch_ht iterator init error");
++        return FAILURE;
++    }
++
++    while ((ht_entry = itr_ext_ht_iterator_next(&iter, NULL))) {
++        if (ht_entry->itr_ext_val.path_complt != TRUE) {
++            return FALSE;
++        }
++    }
++
++    return TRUE;
++}
++
++/* 
++ * Ext traceroute completed. Generate result
++ * Cleanup ht and glist for each ht_entry
++ * Mark batch "not in use" and pick up next batch from waitlist
++ */
++syserr_t 
++itr_ext_post_process_batch(itr_ext_per_hop_info_t *hop_info)
++{
++    itr_ext_batch_t     *batch;
++    GList               *cursor;
++    itr_ext_config_t    *itr_ext_config = NULL;
++    ht_t                *batch_ht;
++    itr_ext_ht_entry_t  *ht_entry;
++    ht_iterator_t       iter;
++
++    batch           = itr_ext_get_batch_frm_hop_inf(hop_info);
++
++    ITR_DEBUG_PRINT(DBG_ITR_TRACE, "Post processing batch at ttl: %d", hop_info->my_ttl);
++    // TODO : Generate Result
++
++    // Cleanup HT and glist
++    batch_ht = &batch->itr_ext_batch_ht;
++    if (!ht_iterator_init(&iter, batch_ht, 0, 
++                ht_get_num_buckets(batch_ht))) {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "batch_ht iterator init error");
++        return FAILURE;
++    }
++
++    while ((ht_entry = itr_ext_ht_iterator_next(&iter, NULL))) {
++        g_list_free(ht_entry->itr_ext_val.probe_list);
++    }
++
++    ht_cleanup(batch_ht);
++
++    // Mark batch "not in use" 
++    batch->in_use   = FALSE;
++
++    if (hop_info->my_input != NULL) {
++        OAM_FREE(hop_info->my_input);
++        hop_info->my_input = NULL;
++    }
++
++    if (hop_info->my_cfg != NULL) {
++        OAM_FREE(hop_info->my_cfg);
++        hop_info->my_cfg = NULL;
++    }
++
++#ifdef ITR_EXT_DEBUG
++    ITR_EXT_PRINT("*********** All Paths complete ***********");
++#endif
++
++    // pick up next batch from waitlist and start ext traceroute
++    cursor = g_list_first(itr_ext_waitlist);
++    if (cursor != NULL) {
++        itr_ext_config  = (itr_ext_config_t *)(cursor->data);
++
++        if (g_list_remove(itr_ext_waitlist, itr_ext_config) == NULL) {
++            ITR_DEBUG_PRINT(DBG_ITR_ERROR, "couldnt find config in waitlist");
++            return FAILURE;
++        }
++
++        if (itr_ext_start_ext_traceroute(itr_ext_config) != SUCCESS) {
++            ITR_DEBUG_PRINT(DBG_ITR_ERROR, "ext_traceroute failed");
++            return FAILURE;
++        }
++    }
++
++    return SUCCESS;
++}
++
++void
++itr_ext_process_path_complete(itr_ext_per_hop_info_t *hop_info,
++                              itr_ext_ht_entry_t *ht_entry,
++                              ht_path_status_t path_status)
++{
++    // Mark the path completed
++    ht_entry->itr_ext_val.path_complt   = TRUE;
++    ht_entry->itr_ext_val.path_status   = path_status;
++
++#ifdef ITR_EXT_DEBUG
++    ITR_EXT_PRINT("*********** Path complete ***********");
++    itr_ext_dump_cfg_ht_hop(hop_info);
++#endif
++
++    //Check if all paths have completed too
++    if (itr_ext_check_all_paths_completed(hop_info) == TRUE) {
++        itr_ext_post_process_batch(hop_info);
++    }
++
++    return;
++
++}
++
++itr_ext_batch_t *
++itr_ext_get_batch_frm_hop_inf(itr_ext_per_hop_info_t *hop_info)
++{
++    itr_ext_batch_t     *batch;
++    itr_ext_input_t     *input;
++    uint32_t            batch_id;
++
++    input           = hop_info->my_input;
++    batch_id        = input->batch_id & ITR_EXT_BATCH_ID_MASK;
++    batch           = itr_ext_get_batch_from_id(batch_id);
++
++    return batch;
++}
++
++syserr_t
++itr_ext_get_ctx_info_from_ctx_name(char *ctx_name, l3vm_context_info_t *ctx_info)
++{
++    context_id_t ctx_id = L3VM_BAD_CONTEXT_ID;
++
++    ctx_id = l3vm_get_context_id(ctx_name);
++    if (ctx_id == L3VM_BAD_CONTEXT_ID) {
++        return FAILURE;
++    }
++
++    if (!l3vm_get_context_info(ctx_id, ctx_info)) {
++        return FAILURE;
++    }
++
++    return SUCCESS;
++
++}
++
++#ifdef ITR_EXT_DEBUG
++void 
++itr_ext_dump_cfg_ht_hop(itr_ext_per_hop_info_t *hop_info)
++{
++    int                     i;
++    itr_ext_ht_entry_t      *ht_entry;
++    itr_ext_config_t        *itr_ext_cfg;
++    ext_trace_cfg_t         *trace_cfg;
++    itr_ext_input_t         *input;
++    five_tuple_info_t       *ht_k_fti;
++    itr_ext_val_t           *ht_val;
++    
++    itr_ext_cfg     = hop_info->my_cfg;
++    trace_cfg       = &hop_info->my_cfg->trace_cfg;    
++    input           = hop_info->my_input;
++    ht_entry        = itr_ext_lookup_ht_entry(hop_info);
++
++    if (ht_entry == NULL) {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Unable to find ht_entry");
++        return;
++    }
++
++    if (!ht_entry->itr_ext_val.cfg_info_dumped) {
++
++        ht_entry->itr_ext_val.cfg_info_dumped = TRUE;
++
++        ITR_EXT_PRINT("*********** Input ***********");
++        ITR_EXT_PRINT("batch_id:            %d", input->batch_id);
++        ITR_EXT_PRINT("bt_tep_ip            %d", input->bt_tep_ip);
++
++        ITR_EXT_PRINT("*********** Trace_cfg ***********");
++        ITR_EXT_PRINT("vrf_name:            %s", trace_cfg->vrf_name);
++        ITR_EXT_PRINT("src_ip:              %d", trace_cfg->src_ip);
++        ITR_EXT_PRINT("dst_ip:              %d", trace_cfg->dst_ip);
++        ITR_EXT_PRINT("prot:                %d", trace_cfg->prot);
++        //ITR_EXT_PRINT("src_mac:             %d", trace_cfg->src_mac);
++        //ITR_EXT_PRINT("dst_mac:             %d", trace_cfg->dst_mac);
++        ITR_EXT_PRINT("vlan:                %d", trace_cfg->vlan);
++        ITR_EXT_PRINT("fdvlan:              %d", trace_cfg->fdvlan);
++        ITR_EXT_PRINT("payload_sz:          %d", trace_cfg->payload_sz);
++        ITR_EXT_PRINT("probe_int_ttl_sec:   %llu", trace_cfg->probe_int_ttl_sec);
++        ITR_EXT_PRINT("probe_int_ttl_usec:  %llu", trace_cfg->probe_int_ttl_usec);
++        ITR_EXT_PRINT("per_hop_ttl_sec:     %llu", trace_cfg->per_hop_ttl_sec);
++        ITR_EXT_PRINT("per_hop_ttl_usec:    %llu", trace_cfg->per_hop_ttl_usec);
++        ITR_EXT_PRINT("fake_hop_sec:        %llu", trace_cfg->fake_hop_sec);
++        ITR_EXT_PRINT("fake_hop_usec:       %llu", trace_cfg->fake_hop_usec);
++        ITR_EXT_PRINT("max_hops:            %d", trace_cfg->max_hops);
++
++        ITR_EXT_PRINT("*********** Itr_ext_cfg ***********");
++        ITR_EXT_PRINT("num_paths:           %d", itr_ext_cfg->num_paths);
++        ITR_EXT_PRINT("sport_start:         %d", itr_ext_cfg->sport_start);
++        ITR_EXT_PRINT("sport_end:           %d", itr_ext_cfg->sport_end);
++        ITR_EXT_PRINT("dport_start:         %d", itr_ext_cfg->dport_start);
++        ITR_EXT_PRINT("num_paths:           %d", itr_ext_cfg->dport_end);
++        ITR_EXT_PRINT("num_bts:             %d", itr_ext_cfg->num_bts);
++        for( i = 0; i < itr_ext_cfg->num_bts; i++) {
++            ITR_EXT_PRINT("num_paths:       %d", itr_ext_cfg->bt_teps[i]);
++        }
++
++        ITR_EXT_PRINT("*********** ht_entry Key ***********");
++        ht_k_fti = &ht_entry->itr_ext_key.five_tuple_info;
++        ht_val = &ht_entry->itr_ext_val;
++        ITR_EXT_PRINT("bt_tep_ip:           %d", ht_entry->itr_ext_key.bt_tep_ip);
++        ITR_EXT_PRINT("src_ip:              %d", ht_k_fti->src_ip);
++        ITR_EXT_PRINT("dst_ip:              %d", ht_k_fti->dst_ip);
++        ITR_EXT_PRINT("src_port:            %d", ht_k_fti->src_port);
++        ITR_EXT_PRINT("dst_port:            %d", ht_k_fti->dst_port);
++        ITR_EXT_PRINT("prot:                %d", (int)ht_k_fti->prot);
++
++        ITR_EXT_PRINT("*********** ht_entry Val ***********");
++        ITR_EXT_PRINT("current_ttl:         %d", ht_val->current_ttl);
++        ITR_EXT_PRINT("path_num:            %d", ht_val->path_num);
++        ITR_EXT_PRINT("path_complt:         %d", ht_val->path_complt);
++        ITR_EXT_PRINT("path_status:         %d", (int)ht_val->path_status);
++        ITR_EXT_PRINT("tcp_sta:             %d", (int)ht_val->tcp_sta);
++    }
++
++    itr_ext_dump_hop(ht_entry, hop_info, input);
++
++}
++
++void 
++itr_ext_dump_hop(itr_ext_ht_entry_t *ht_entry, itr_ext_per_hop_info_t *hop_info, 
++                 itr_ext_input_t *input)
++{
++    ITR_EXT_PRINT("*********** All hops ***********");
++    GList* cursor = g_list_first(ht_entry->itr_ext_val.probe_list);
++    while(cursor) {
++        itr_ext_per_hop_info_t* prev_hop = (itr_ext_per_hop_info_t*)cursor->data;
++        cursor = g_list_next(cursor);
++        ITR_EXT_PRINT("batch_id: [%d] bt_tep_ip: [%d] my_ttl: [%d] "
++                      "hop_start_ts: [%llu] src_port: [%d] dst_port: [%d]"
++                      "my_input: [%p] my_cfg: [%p]", 
++                      input->batch_id, input->bt_tep_ip, prev_hop->my_ttl, 
++                      prev_hop->hop_start_ts, prev_hop->src_port, 
++                      prev_hop->dst_port, hop_info->my_input, hop_info->my_cfg);
++    }
++
++    ITR_EXT_PRINT("*********** Current Hop_info ***********");
++    uint64  diff = hop_info->hop_end_ts - hop_info->hop_start_ts;
++    ITR_EXT_PRINT("batch_id:            %d", input->batch_id);
++    ITR_EXT_PRINT("bt_tep_ip:           %d", input->bt_tep_ip);
++    ITR_EXT_PRINT("my_ttl:              %d", hop_info->my_ttl);
++    ITR_EXT_PRINT("hop_start_ts:        %llu", hop_info->hop_start_ts);
++    ITR_EXT_PRINT("hop_end_ts:          %llu", hop_info->hop_end_ts);
++    ITR_EXT_PRINT("delta_ts:            %llu", diff);
++    ITR_EXT_PRINT("processed:           %d", hop_info->processed);
++    ITR_EXT_PRINT("hop_node_ip:         %s", ip_print_addr(hop_info->hop_node_ip));
++    ITR_EXT_PRINT("hop_status:          %d", (int)hop_info->hop_status);
++    ITR_EXT_PRINT("src_port:            %d", hop_info->src_port);
++    ITR_EXT_PRINT("dst_port:            %d", hop_info->dst_port);
++    ITR_EXT_PRINT("my_input:            %p", hop_info->my_input);
++    ITR_EXT_PRINT("my_cfg:              %p", hop_info->my_cfg);
++}
++
++/*
++ * Sample /tmp/itr_ext_cfg.txt file
++ sport_start: 100
++ sport_end: 200
++ dport_start: 1
++ dport_end: 5
++ prot: 1
++ int_sec: 5
++ int_usec: 0
++ ttl_sec: 3
++ ttl_usec: 0
++ fake_sec: 1
++ fake_usec: 0
++ max_hops: 5
++ num_bts: 2
++ bt_tep: 167838211
++ bt_tep: 167838983
++ */
++syserr_t
++itr_ext_debug_load_cfg_from_file(itr_ext_config_t *itr_ext_config)
++{
++    FILE *fp;
++    char s[50], line[100];
++    int i, j;
++
++    fp = fopen("/var/tmp/itr_ext_cfg.txt", "r");
++    if (fp == NULL) {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Read Err: /tmp/itr_ext_cfg.txt");
++        return FAILURE;
++    }
++
++    while(fgets(line, 100, fp) != NULL) {
++        sscanf(line, "%s %d", s, &i);
++        ITR_DEBUG_PRINT(DBG_ITR_TRACE, "s:%s => i:%d", s, i);
++
++        if(!strcmp(s, "num_paths")) {
++            itr_ext_config->num_paths = i;
++        } 
++       if(!strcmp(s, "sport_start")) {
++            itr_ext_config->sport_start = i;
++        }
++        if(!strcmp(s, "sport_end")) {
++            itr_ext_config->sport_end = i;
++        }
++        if(!strcmp(s, "dport_start")) {
++            itr_ext_config->dport_start = i;
++        }
++        if(!strcmp(s, "dport_end")) {
++            itr_ext_config->dport_end = i;
++        } 
++        if(!strcmp(s, "prot:")) {
++            itr_ext_config->trace_cfg.prot = i; 
++        }
++        if(!strcmp(s, "int_sec:")) {
++            itr_ext_config->trace_cfg.probe_int_ttl_sec = i; 
++        }
++        if(!strcmp(s, "int_usec:")) {
++            itr_ext_config->trace_cfg.probe_int_ttl_usec = i; 
++        }
++        if(!strcmp(s, "ttl_sec:")) {
++            itr_ext_config->trace_cfg.per_hop_ttl_sec = i; 
++        }
++        if(!strcmp(s, "ttl_usec:")) {
++            itr_ext_config->trace_cfg.per_hop_ttl_usec = i; 
++        }
++        if(!strcmp(s, "fake_sec:")) {
++            itr_ext_config->trace_cfg.fake_hop_sec = i; 
++        }
++        if(!strcmp(s, "fake_usec:")) {
++            itr_ext_config->trace_cfg.fake_hop_usec = i; 
++        }
++        if(!strcmp(s, "max_hops:")) {
++            itr_ext_config->trace_cfg.max_hops = i; 
++        }
++        if(!strcmp(s, "num_bts:")) {
++            itr_ext_config->num_bts = i;
++            for(j = 0; j < itr_ext_config->num_bts ; j++) {
++                if (fgets(line, 100, fp) != NULL) {
++                    sscanf(line, "%s %d", s, &i);
++                    if(!strcmp(s, "bt_tep:")) {
++                        itr_ext_config->bt_teps[j] = i;
++                    }
++                    else {
++                        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Not enough bt_teps");
++                        return FAILURE;
++                    }
++                }
++                else {
++                    ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Not enough info");
++                    return FAILURE;
++                }
++            }
++        }
++
++    }
++
++    return SUCCESS;
++}
++
++syserr_t
++itr_ext_debug_populate_cfg_from_itr_in(itr_input_t* itr_in,
++                                       itr_ext_config_t *itr_ext_config)
++{
++    // Load defaults
++    itr_ext_config->num_paths                       = 5;
++    itr_ext_config->sport_start                     = 0;
++    itr_ext_config->sport_end                       = 65535;
++    itr_ext_config->dport_start                     = 0;
++    itr_ext_config->dport_end                       = 65535;
++    itr_ext_config->num_bts                         = 2;
++    itr_ext_config->bt_teps[0]                      = 167838211; // 0xa010203
++    itr_ext_config->bt_teps[1]                      = 167838983; // 0xa010507
++
++    itr_ext_config->trace_cfg.prot                  = 1; // ITR_PROT_TCP 
++    itr_ext_config->trace_cfg.probe_int_ttl_sec     = 5; 
++    itr_ext_config->trace_cfg.probe_int_ttl_usec    = 0; 
++    itr_ext_config->trace_cfg.per_hop_ttl_sec       = 3; 
++    itr_ext_config->trace_cfg.per_hop_ttl_usec      = 0; 
++    itr_ext_config->trace_cfg.fake_hop_sec          = 1; 
++    itr_ext_config->trace_cfg.fake_hop_usec         = 0; 
++    itr_ext_config->trace_cfg.max_hops              = 5; 
++
++    // Load cfg from file
++    itr_ext_debug_load_cfg_from_file(itr_ext_config);
++
++    // Load cfg from itr_in
++    itr_ext_config->trace_cfg.src_ip                = itr_in->src_ip;
++    itr_ext_config->trace_cfg.dst_ip                = itr_in->dst_ip;
++    itr_ext_config->trace_cfg.src_node_id           = itr_in->src_node_id;
++    itr_ext_config->trace_cfg.dst_node_id           = itr_in->dst_node_id;
++    itr_ext_config->trace_cfg.payload_sz            = itr_in->payload_sz;
++    itr_ext_config->trace_cfg.fdvlan                = itr_in->fdvlan;
++    itr_ext_config->trace_cfg.vxlan_nid             = itr_in->vxlan_nid;
++    memcpy(&itr_ext_config->trace_cfg.src_mac, &itr_in->src_mac, sizeof(mac_t));
++    memcpy(&itr_ext_config->trace_cfg.dst_mac, &itr_in->dst_mac, sizeof(mac_t));
++    memcpy(&itr_ext_config->trace_cfg.vlan, &itr_in->vlan, sizeof(vlan_id_t));
++    memcpy(itr_ext_config->trace_cfg.vrf_name, itr_in->vrf_name, sizeof(vlan_id_t));
++
++    return SUCCESS;
++}
++
++#endif
++
++#if 0
++// Notes
++
++syserr_t 
++itr_ext_start_probe (itr_ext_config_t *itr_ext_config, 
++                     itr_ext_input_t *input,
++                     uint32_t src_port, uint32_t dst_port) 
++{
++    uint32_t        batch_id;
++    syserr_t        err = SUCCESS;
++
++    /**********************  (1) Get the batch first ************************/
++    // only keep the lower 14 bits. 
++    batch_id = input->batch_id & ITR_EXT_BATCH_ID_MASK;
++    itr_ext_batch_t *batch = &itr_ext_global_info.itr_ext_batch[batch_id];
++
++    if (batch->ht_state != ITR_EXT_HT_INITED) {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "HT not inited");
++        return FAILURE;
++    }
++
++    ITR_DEBUG_PRINT(DBG_ITR_TRACE, "Beg ext traceroute(batch = %d)", batch_id);
++
++    /************************************************************************/
++    /********************** (2) Lookup the ht entry *************************/
++    itr_ext_key_t           ht_key;
++    itr_ext_ht_entry_t      *ht_entry = NULL;
++    itr_ext_per_hop_info_t  *hop_info = NULL; 
++    uint32_t                next_ttl;
++    uint8                   magic_number;
++
++    // Build the key
++    memset(&ht_key, 0, sizeof(itr_ext_key_t));
++    ht_key.five_tuple_info.src_ip       = itr_ext_config->trace_cfg.src_ip;
++    ht_key.five_tuple_info.dst_ip       = itr_ext_config->trace_cfg.dst_ip;
++    ht_key.five_tuple_info.src_port     = src_port;
++    ht_key.five_tuple_info.dst_port     = dst_port;
++    ht_key.five_tuple_info.prot         = itr_ext_config->trace_cfg.prot;
++    ht_key.bt_tep_ip                    = input->bt_tep_ip;
++
++    // Do a lookup to veriy if entry exists
++    ht_entry = itr_ext_ht_lookup(&batch->itr_ext_batch_ht, &ht_key);
++    if (ht_entry != NULL) {
++        itr_debug_print_five_tuple_info(
++                                &ht_entry->itr_ext_key.five_tuple_info);
++    }
++    else {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "HT entry not found while sending probe");
++        return FAILURE;
++    }
++    /************************************************************************/
++    /************************* (3) Send packet ******************************/
++    // TODO: generate the magic number per probe
++    magic_number = ITR_EXT_PROBE_SIGNATURE;
++    next_ttl = ht_entry->itr_ext_val.current_ttl + 1;
++
++    // Send packet before adding to ht/batch/glist/incrementing ttl. 
++    // batch_id and path_num to be encoded
++    // TODO - Jalaja. 
++    /*
++    if (itr_send_ivxlan_packet_to_lasthop(itr_ext_config, input, 
++                                          path_num, batch_id, 
++                                          next_ttl, magic_number) != SUCCESS) {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Packet send failed");
++        return FAILURE;
++    }
++    */
++    /************************************************************************/
++    /********************** (4) Populate hop_info ***************************/
++    hop_info = (itr_ext_per_hop_info_t *)malloc(sizeof(itr_ext_per_hop_info_t));
++
++    ht_entry->itr_ext_val.current_ttl = next_ttl;
++    hop_info->my_ttl        = ht_entry->itr_ext_val.current_ttl;
++    hop_info->hop_start_ts  = itr_get_cur_timestamp();
++    hop_info->src_prt       = src_port;
++    hop_info->dst_prt       = dst_port;
++    hop_info->timeout_timer = tg_create_timer(tg_handle, 
++                                    ITR_EXT_PER_HOP_TIMEOUT_TIMER, 
++                                    (void*)hop_info, 0);
++    hop_info->interval_timer = tg_create_timer(tg_handle, 
++                                    ITR_EXT_INTERVAL_TIMER, 
++                                    (void*)hop_info, 0);
++    hop_info->my_cfg        = itr_ext_config;
++    hop_info->my_input      = input
++    hop_info->hop_status    = HOP_STATUS_INITIATED; 
++
++    struct timeval timeout;
++    timeout.tv_sec  = itr_ext_config->trace_cfg.per_hop_ttl_sec; 
++    timeout.tv_usec = itr_ext_config->trace_cfg.per_hop_ttl_usec; 
++
++    ITR_DEBUG_PRINT(DBG_ITR_TRACE, "starting timer for %lu.%d", 
++            timeout.tv_sec, timeout.tv_usec);
++    if (tg_start_timer(hop_info->timeout_timer, 
++                       &timeout) != TG_TIMER_STARTED) {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Unable to start per ttl timer");
++        goto FREE_AND_RET_ERR;
++    }
++    /************************************************************************/
++    /**************************** (5) Add to ht *****************************/
++
++    g_list_append(ht_entry->itr_ext_val.probe_list, &hop_info);
++
++    /************************************************************************/
++    
++    return SUCCESS;
++
++FREE_AND_RET_ERR:
++    if (hop_info != NULL) {
++        OAM_FREE(hop_info);
++    }
++    return FAILURE;
++}
++#endif
+
+Index: feature/oam/server/itr_responder.c
+===================================================================
+--- server/.CC/cache/itr_responder.c@@/main/antares/12	2014-12-03 14:49:17.000000000 -0800
++++ server/itr_responder.c	2014-12-09 03:51:22.000000000 -0800
+@@ -428,6 +428,31 @@
+             }
+             break;
+ 
++        case ITR_EXT_PER_HOP_TIMEOUT_TIMER:
++            if ((itr_ext_prober_process_per_ttl_timeout(
++                    (itr_ext_per_hop_info_t *)context)) != SUCCESS) {
++                ITR_DEBUG_PRINT(DBG_ITR_ERROR, "OAM ext per ttl timer "
++                        "timeout, but failed to initiate traceroute.");
++            }
++            break;
++
++#ifdef ITR_EXT_DEBUG
++        case ITR_EXT_HOP_FAKE_TIMER:
++            if ((itr_ext_prober_process_hop_fake_timer(
++                    (itr_ext_per_hop_info_t *)context)) != SUCCESS) {
++                ITR_DEBUG_PRINT(DBG_ITR_ERROR, "OAM ext hop fake timer "
++                        "timeout, but failed to initiate traceroute.");
++            }
++            break;
++#endif
++
++        case ITR_EXT_INTERVAL_TIMER:
++            if ((itr_ext_send_next_probe(
++                    (itr_ext_per_hop_info_t *)context)) != SUCCESS) {
++                ITR_DEBUG_PRINT(DBG_ITR_ERROR, "OAM ext interval timer timeout");
++            }
++            break;
++
+         default:
+             ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Unknown timer timeout type.");
+             assert(FALSE);
+
+Index: feature/oam/server/itr_util.c
+===================================================================
+--- server/.CC/cache/itr_util.c@@/main/antares/amazon2/1	2014-12-03 14:49:17.000000000 -0800
++++ server/itr_util.c	2014-12-05 17:13:08.000000000 -0800
+@@ -235,3 +235,131 @@
+    return result;
+ }
+ 
++//----------------------------------------------------------------------------
++// modified FNV hash function
++//----------------------------------------------------------------------------
++uint32_t
++itr_fnv_hash (void *key, uint32_t len, uint32_t num_buckets)
++{
++    uint8_t  *ptr = key;
++    uint32_t i, hv = 2166136261;
++
++    for (i = 0; i < len; i++) {
++        hv = (hv * 16777619) ^ ptr[i];
++    }
++
++    return (hv % num_buckets);
++}
++
++//----------------------------------------------------------------------------
++// itr_ext_get_hash_key
++//
++// return the ht key corresponding to this hash table entry
++//----------------------------------------------------------------------------
++static itr_ext_key_t *
++itr_ext_get_hash_key (itr_ext_ht_entry_t *entry)
++{
++        return &entry->itr_ext_key;
++}
++
++//----------------------------------------------------------------------------
++// itr_ext_hash_keys_equal
++//
++// compare two keys and return TRUE if they are the same
++//----------------------------------------------------------------------------
++static boolean
++itr_ext_hash_keys_equal (itr_ext_key_t *key1, itr_ext_key_t *key2)
++{
++    // check if vrf vnids match
++    if (memcmp(key1, key2, sizeof(itr_ext_key_t))) {
++        return FALSE;
++    }
++
++    return TRUE;
++}
++
++//----------------------------------------------------------------------------
++// itr_ext_compute_hash
++//
++// hash function for the VRF hash table
++// simply mod it and return
++//----------------------------------------------------------------------------
++static ht_hash_code_t
++itr_ext_compute_hash (itr_ext_key_t *key, ulong num_buckets)
++{
++        return itr_fnv_hash(key, sizeof(itr_ext_key_t), num_buckets);
++}
++
++void
++itr_init_global_tables()
++{
++    memset(&itr_ext_global_info, 0, sizeof(struct itr_ext_global_info_t));
++}
++
++//-----------------------------------------------------------------------------
++// init Itraceroute hash tables
++//-----------------------------------------------------------------------------
++syserr_t
++itr_init_ht(ht_t *itr_ext_batch_ht)
++{
++
++    ulong num_bkts;
++
++    // init ext trace hash table
++    num_bkts = ht_compute_num_buckets(ITR_EXT_HT_SZ,
++                                      ITR_EXT_HT_LOAD_FACTOR);
++    if (!itr_ext_ht_init(itr_ext_batch_ht, NULL,
++                         num_bkts, 0, itr_ext_compute_hash,
++                         itr_ext_get_hash_key,
++                         itr_ext_hash_keys_equal)) {
++        ITR_DEBUG_PRINT(DBG_ITR_ERROR, "Failed to init itr_ext hash table");
++        return FAILURE;
++    }
++
++    return SUCCESS;
++
++}
++
++syserr_t
++itr_initialize_tables()
++{
++
++    itr_init_global_tables();
++
++    return SUCCESS;
++
++}
++
++boolean
++itr_check_get_timer_diff(uint64 time1_sec, uint64 time1_usec,
++                         uint64 time2_sec, uint64 time2_usec,
++                         struct timeval *timeout)
++{
++    uint64 time1_tot_usec, time2_tot_usec;
++    uint64 diff;
++
++    time1_tot_usec  = (time1_sec * 1000000) + time1_usec;
++    time2_tot_usec  = (time2_sec * 1000000) + time2_usec;
++    // Case1: TTL_TO >= INT_TO -> start next probe without waiting 
++    if (time1_tot_usec >= time2_tot_usec) {
++        return FALSE;
++    }
++    // Case1: TTL_TO < INT_TO -> wait for delta before starting next probe
++    else {
++        diff = (time2_tot_usec - time1_tot_usec);
++        timeout->tv_sec = diff / (1000000);
++        timeout->tv_usec = diff % (1000000);
++        return TRUE;
++    }
++
++    return FALSE;
++
++}
++
++void 
++itr_debug_print_five_tuple_info(five_tuple_info_t *info)
++{
++    ITR_DEBUG_PRINT(DBG_ITR_TRACE, "%d %s(%d) %s(%d)", 
++            info->prot, ip_print_addr(info->src_ip), info->src_port, 
++            ip_print_addr(info->dst_ip), info->dst_port);
++}
+
+Index: feature/oam/server/itr_util.h
+===================================================================
+--- server/.CC/cache/itr_util.h@@/main/antares/8	2014-12-05 18:38:43.000000000 -0800
++++ server/itr_util.h	2014-12-05 17:13:05.000000000 -0800
+@@ -130,5 +130,9 @@
+ itr_get_infra_vrf_id ();
+ extern int 
+ tv_comp (struct timeval time1, struct timeval time2);
++boolean
++itr_check_get_timer_diff(uint64 time1_sec, uint64 time1_usec,
++                         uint64 time2_sec, uint64 time2_usec,
++                         struct timeval *timeout);
+ 
+ #endif //__ITR_UTIL_H__
+
+Index: feature/oam/server/module.mk
+===================================================================
+--- server/.CC/cache/module.mk@@/main/antares/8	2014-12-06 18:35:43.000000000 -0800
++++ server/module.mk	2014-12-06 18:35:42.000000000 -0800
+@@ -44,7 +44,9 @@
+ 	$(BLDGRP_BLD_DIR)/oam.conf \
+ 	$(BLDGRP_BLD_DIR)/oam.cli
+ 
+-$(BLDGRP_BLD_DIR)/% :  EXTRA_CFLAGS :=  -rdynamic -Werror -Wall 
++$(BLDGRP_BLD_DIR)/% :  EXTRA_CFLAGS :=  -rdynamic -lm -Werror -Wall 
++
++$(BLDGRP_BLD_DIR)/% :  LDFLAGS      := -lm
+ 
+ $(BLDGRP_BLD_DIR)/%: EXTRA_DEFINES := -DITR_DEBUG -DOAM_DEBUG
+ 
+
+Index: feature/oam/server/oam.h
+===================================================================
+--- server/.CC/cache/oam.h@@/main/antares/amazon2/1	2014-12-03 14:49:17.000000000 -0800
++++ server/oam.h	2014-11-25 20:33:17.000000000 -0800
+@@ -68,7 +68,8 @@
+     EXIT_CODE_SERIALNUM_MTS_FAIL,
+     EXIT_CODE_DB_INIT_FAIL,
+     EXIT_CODE_FICON_INIT_FAIL,
+-    EXIT_CODE_OBJ_STORE_INIT_FAIL
++    EXIT_CODE_OBJ_STORE_INIT_FAIL,
++    EXIT_CODE_HT_INIT_FAIL
+ };
+ 
+ #define OAM_PROCESS_START_WAIT_TIME_SEC 540 
+
+Index: feature/oam/server/oam_fu.c
+===================================================================
+--- server/.CC/cache/oam_fu.c@@/main/antares/10	2014-12-03 14:49:17.000000000 -0800
++++ server/oam_fu.c	2014-12-09 03:51:16.000000000 -0800
+@@ -42,6 +42,9 @@
+ //---------------------------------------------------------------------
+ //     Temporary Place holders
+ //---------------------------------------------------------------------
++#ifdef ITR_EXT_DEBUG
++extern FILE *itr_ext_fp;
++#endif
+ 
+ 
+ fu_err_t oam_other_msg_handler (
+@@ -292,6 +295,9 @@
+             case ITR_BATCH_TIMER:
+             case OAM_PROCESS_START_TIMER:    
+             case OAM_TASK_INTERVAL_TIMER:    
++            case ITR_EXT_PER_HOP_TIMEOUT_TIMER:
++            case ITR_EXT_INTERVAL_TIMER:
++            case ITR_EXT_HOP_FAKE_TIMER:
+                 itr_handle_timer_timeout(type, context);
+                 break;
+ 
+
+Index: feature/oam/server/oam_main.c
+===================================================================
+--- server/.CC/cache/oam_main.c@@/main/antares/amazon2/2	2014-12-03 14:49:17.000000000 -0800
++++ server/oam_main.c	2014-12-09 03:37:37.000000000 -0800
+@@ -34,10 +34,16 @@
+ #include "isan/fsm_utils_intf.h"
+ 
+ #include "itr.h"
++#include "itr_util.h"
+ #include "oam.h"
+ #include "oam_obj.h"
+ #include "timer.h"
+ 
++#ifdef ITR_EXT_DEBUG
++extern FILE *itr_ext_fp;
++int test = 1;
++#endif
++
+ #define OAM_EV_LOG_BUFFER_SIZE     (5 * 1024 * 1024)
+ #define OAM_ERR_LOG_BUFFER_SIZE    (1 * 1024 * 1024)
+ #define OAM_TRACE_LOG_BUFFER_SIZE (25 * 1024 * 1024)
+@@ -228,6 +234,13 @@
+          exit(EXIT_CODE_OBJ_STORE_INIT_FAIL);
+     }
+ 
++    if ((ret_val = itr_initialize_tables()) != SUCCESS) {
++         OAM_DEBUG_PRINT(DBG_OAM_ERROR, "ERROR: OAM objstore initialization"
++                 "failed");
++         assert(0);
++         exit(EXIT_CODE_HT_INIT_FAIL);
++    }
++
+     // Initialize the fsm utils library related information
+     // It will also initialize the timer library and the timer_q that will be
+     // used for local timeout events.
+@@ -366,7 +379,13 @@
+     oam_request_for_server_notifications();
+     printf("%s(%d): Initialization done, handling control to fsm engine\n",
+            __FUNCTION__, __LINE__);
+-    
++
++#if 0
++    while(test) {
++        sleep(1);
++    }
++#endif
++
+     fu_fsm_engine();
+ 
+     oam_cleanup();
+
+Index: feature/oam/server/oam_mem_types.h
+===================================================================
+--- server/.CC/cache/oam_mem_types.h@@/main/antares/3	2014-12-08 11:01:57.000000000 -0800
++++ server/oam_mem_types.h	2014-12-08 11:02:16.000000000 -0800
+@@ -46,6 +46,10 @@
+     __enum_entry(OAM_MEM_oam_prikey_t, 18)
+     __enum_entry(OAM_MEM_itr_exec_t, 19)
+     __enum_entry(OAM_MEM_oam_task_t, 20)
+-    __enum_entry(OAM_MEM_MAX, 21)
++    __enum_entry(OAM_MEM_ext_ht_entry_t, 21)
++    __enum_entry(OAM_MEM_ext_hop_info_t, 22)
++    __enum_entry(OAM_MEM_ext_input_t, 23)
++    __enum_entry(OAM_MEM_ext_config_t, 24)
++    __enum_entry(OAM_MEM_MAX, 25)
+ __enum_end(oam_mem_type_t)
+     

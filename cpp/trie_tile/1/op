@@ -1,0 +1,747 @@
+init_static_map(91): : v4 plen/blen(0): 0/0: 1
+init_static_map(91): : v4 plen/blen(0): 1/1: 1
+init_static_map(91): : v4 plen/blen(1): 1/0: 2
+init_static_map(91): : v4 plen/blen(0): 2/2: 1
+init_static_map(91): : v4 plen/blen(1): 2/1: 2
+init_static_map(91): : v4 plen/blen(2): 2/0: 4
+init_static_map(91): : v4 plen/blen(0): 3/3: 1
+init_static_map(91): : v4 plen/blen(1): 3/2: 2
+init_static_map(91): : v4 plen/blen(2): 3/1: 4
+init_static_map(91): : v4 plen/blen(3): 3/0: 8
+init_static_map(91): : v4 plen/blen(0): 4/4: 1
+init_static_map(91): : v4 plen/blen(1): 4/3: 2
+init_static_map(91): : v4 plen/blen(2): 4/2: 4
+init_static_map(91): : v4 plen/blen(3): 4/1: 8
+init_static_map(91): : v4 plen/blen(0): 5/5: 1
+init_static_map(91): : v4 plen/blen(1): 5/4: 2
+init_static_map(91): : v4 plen/blen(2): 5/3: 4
+init_static_map(91): : v4 plen/blen(3): 5/2: 8
+init_static_map(91): : v4 plen/blen(0): 6/6: 1
+init_static_map(91): : v4 plen/blen(1): 6/5: 2
+init_static_map(91): : v4 plen/blen(2): 6/4: 4
+init_static_map(91): : v4 plen/blen(3): 6/3: 8
+init_static_map(91): : v4 plen/blen(0): 7/7: 1
+init_static_map(91): : v4 plen/blen(1): 7/6: 2
+init_static_map(91): : v4 plen/blen(2): 7/5: 4
+init_static_map(91): : v4 plen/blen(3): 7/4: 8
+init_static_map(91): : v4 plen/blen(0): 8/8: 1
+init_static_map(91): : v4 plen/blen(1): 8/7: 2
+init_static_map(91): : v4 plen/blen(2): 8/6: 4
+init_static_map(91): : v4 plen/blen(3): 8/5: 8
+init_static_map(91): : v4 plen/blen(0): 9/9: 1
+init_static_map(91): : v4 plen/blen(1): 9/8: 2
+init_static_map(91): : v4 plen/blen(2): 9/7: 4
+init_static_map(91): : v4 plen/blen(3): 9/6: 8
+init_static_map(91): : v4 plen/blen(0): 10/10: 1
+init_static_map(91): : v4 plen/blen(1): 10/9: 2
+init_static_map(91): : v4 plen/blen(2): 10/8: 4
+init_static_map(91): : v4 plen/blen(3): 10/7: 8
+init_static_map(91): : v4 plen/blen(0): 11/11: 1
+init_static_map(91): : v4 plen/blen(1): 11/10: 2
+init_static_map(91): : v4 plen/blen(2): 11/9: 4
+init_static_map(91): : v4 plen/blen(3): 11/8: 8
+init_static_map(91): : v4 plen/blen(0): 12/12: 1
+init_static_map(91): : v4 plen/blen(1): 12/11: 2
+init_static_map(91): : v4 plen/blen(2): 12/10: 4
+init_static_map(91): : v4 plen/blen(3): 12/9: 8
+init_static_map(91): : v4 plen/blen(0): 13/13: 1
+init_static_map(91): : v4 plen/blen(1): 13/12: 2
+init_static_map(91): : v4 plen/blen(2): 13/11: 4
+init_static_map(91): : v4 plen/blen(3): 13/10: 8
+init_static_map(91): : v4 plen/blen(0): 14/14: 1
+init_static_map(91): : v4 plen/blen(1): 14/13: 2
+init_static_map(91): : v4 plen/blen(2): 14/12: 4
+init_static_map(91): : v4 plen/blen(3): 14/11: 8
+init_static_map(91): : v4 plen/blen(0): 15/15: 1
+init_static_map(91): : v4 plen/blen(1): 15/14: 2
+init_static_map(91): : v4 plen/blen(2): 15/13: 4
+init_static_map(91): : v4 plen/blen(3): 15/12: 8
+init_static_map(91): : v4 plen/blen(0): 16/16: 1
+init_static_map(91): : v4 plen/blen(1): 16/15: 2
+init_static_map(91): : v4 plen/blen(2): 16/14: 4
+init_static_map(91): : v4 plen/blen(3): 16/13: 8
+init_static_map(91): : v4 plen/blen(0): 17/17: 1
+init_static_map(91): : v4 plen/blen(1): 17/16: 2
+init_static_map(91): : v4 plen/blen(2): 17/15: 4
+init_static_map(91): : v4 plen/blen(3): 17/14: 8
+init_static_map(91): : v4 plen/blen(0): 18/18: 1
+init_static_map(91): : v4 plen/blen(1): 18/17: 2
+init_static_map(91): : v4 plen/blen(2): 18/16: 4
+init_static_map(91): : v4 plen/blen(3): 18/15: 8
+init_static_map(91): : v4 plen/blen(0): 19/19: 1
+init_static_map(91): : v4 plen/blen(1): 19/18: 2
+init_static_map(91): : v4 plen/blen(2): 19/17: 4
+init_static_map(91): : v4 plen/blen(3): 19/16: 8
+init_static_map(91): : v4 plen/blen(0): 20/20: 1
+init_static_map(91): : v4 plen/blen(1): 20/19: 2
+init_static_map(91): : v4 plen/blen(2): 20/18: 4
+init_static_map(91): : v4 plen/blen(3): 20/17: 8
+init_static_map(91): : v4 plen/blen(0): 21/21: 1
+init_static_map(91): : v4 plen/blen(1): 21/20: 2
+init_static_map(91): : v4 plen/blen(2): 21/19: 4
+init_static_map(91): : v4 plen/blen(3): 21/18: 8
+init_static_map(91): : v4 plen/blen(0): 22/22: 1
+init_static_map(91): : v4 plen/blen(1): 22/21: 2
+init_static_map(91): : v4 plen/blen(2): 22/20: 4
+init_static_map(91): : v4 plen/blen(3): 22/19: 8
+init_static_map(91): : v4 plen/blen(0): 23/23: 1
+init_static_map(91): : v4 plen/blen(1): 23/22: 2
+init_static_map(91): : v4 plen/blen(2): 23/21: 4
+init_static_map(91): : v4 plen/blen(3): 23/20: 8
+init_static_map(91): : v4 plen/blen(0): 24/24: 1
+init_static_map(91): : v4 plen/blen(1): 24/23: 2
+init_static_map(91): : v4 plen/blen(2): 24/22: 4
+init_static_map(91): : v4 plen/blen(3): 24/21: 8
+init_static_map(91): : v4 plen/blen(0): 25/25: 1
+init_static_map(91): : v4 plen/blen(1): 25/24: 2
+init_static_map(91): : v4 plen/blen(2): 25/23: 4
+init_static_map(91): : v4 plen/blen(3): 25/22: 8
+init_static_map(91): : v4 plen/blen(0): 26/26: 1
+init_static_map(91): : v4 plen/blen(1): 26/25: 2
+init_static_map(91): : v4 plen/blen(2): 26/24: 4
+init_static_map(91): : v4 plen/blen(3): 26/23: 8
+init_static_map(91): : v4 plen/blen(0): 27/27: 1
+init_static_map(91): : v4 plen/blen(1): 27/26: 2
+init_static_map(91): : v4 plen/blen(2): 27/25: 4
+init_static_map(91): : v4 plen/blen(3): 27/24: 8
+init_static_map(91): : v4 plen/blen(0): 28/28: 1
+init_static_map(91): : v4 plen/blen(1): 28/27: 2
+init_static_map(91): : v4 plen/blen(2): 28/26: 4
+init_static_map(91): : v4 plen/blen(3): 28/25: 8
+init_static_map(91): : v4 plen/blen(0): 29/29: 1
+init_static_map(91): : v4 plen/blen(1): 29/28: 2
+init_static_map(91): : v4 plen/blen(2): 29/27: 4
+init_static_map(91): : v4 plen/blen(3): 29/26: 8
+init_static_map(91): : v4 plen/blen(0): 30/30: 1
+init_static_map(91): : v4 plen/blen(1): 30/29: 2
+init_static_map(91): : v4 plen/blen(2): 30/28: 4
+init_static_map(91): : v4 plen/blen(3): 30/27: 8
+init_static_map(91): : v4 plen/blen(0): 31/31: 1
+init_static_map(91): : v4 plen/blen(1): 31/30: 2
+init_static_map(91): : v4 plen/blen(2): 31/29: 4
+init_static_map(91): : v4 plen/blen(3): 31/28: 8
+init_static_map(105): : v6 plen/blen(0): 0/0: 1
+init_static_map(105): : v6 plen/blen(0): 1/1: 1
+init_static_map(105): : v6 plen/blen(1): 1/0: 2
+init_static_map(105): : v6 plen/blen(0): 2/2: 1
+init_static_map(105): : v6 plen/blen(1): 2/1: 2
+init_static_map(105): : v6 plen/blen(2): 2/0: 4
+init_static_map(105): : v6 plen/blen(0): 3/3: 1
+init_static_map(105): : v6 plen/blen(1): 3/2: 2
+init_static_map(105): : v6 plen/blen(2): 3/1: 4
+init_static_map(105): : v6 plen/blen(3): 3/0: 8
+init_static_map(105): : v6 plen/blen(0): 4/4: 1
+init_static_map(105): : v6 plen/blen(1): 4/3: 2
+init_static_map(105): : v6 plen/blen(2): 4/2: 4
+init_static_map(105): : v6 plen/blen(3): 4/1: 8
+init_static_map(105): : v6 plen/blen(0): 5/5: 1
+init_static_map(105): : v6 plen/blen(1): 5/4: 2
+init_static_map(105): : v6 plen/blen(2): 5/3: 4
+init_static_map(105): : v6 plen/blen(3): 5/2: 8
+init_static_map(105): : v6 plen/blen(0): 6/6: 1
+init_static_map(105): : v6 plen/blen(1): 6/5: 2
+init_static_map(105): : v6 plen/blen(2): 6/4: 4
+init_static_map(105): : v6 plen/blen(3): 6/3: 8
+init_static_map(105): : v6 plen/blen(0): 7/7: 1
+init_static_map(105): : v6 plen/blen(1): 7/6: 2
+init_static_map(105): : v6 plen/blen(2): 7/5: 4
+init_static_map(105): : v6 plen/blen(3): 7/4: 8
+init_static_map(105): : v6 plen/blen(0): 8/8: 1
+init_static_map(105): : v6 plen/blen(1): 8/7: 2
+init_static_map(105): : v6 plen/blen(2): 8/6: 4
+init_static_map(105): : v6 plen/blen(3): 8/5: 8
+init_static_map(105): : v6 plen/blen(0): 9/9: 1
+init_static_map(105): : v6 plen/blen(1): 9/8: 2
+init_static_map(105): : v6 plen/blen(2): 9/7: 4
+init_static_map(105): : v6 plen/blen(3): 9/6: 8
+init_static_map(105): : v6 plen/blen(0): 10/10: 1
+init_static_map(105): : v6 plen/blen(1): 10/9: 2
+init_static_map(105): : v6 plen/blen(2): 10/8: 4
+init_static_map(105): : v6 plen/blen(3): 10/7: 8
+init_static_map(105): : v6 plen/blen(0): 11/11: 1
+init_static_map(105): : v6 plen/blen(1): 11/10: 2
+init_static_map(105): : v6 plen/blen(2): 11/9: 4
+init_static_map(105): : v6 plen/blen(3): 11/8: 8
+init_static_map(105): : v6 plen/blen(0): 12/12: 1
+init_static_map(105): : v6 plen/blen(1): 12/11: 2
+init_static_map(105): : v6 plen/blen(2): 12/10: 4
+init_static_map(105): : v6 plen/blen(3): 12/9: 8
+init_static_map(105): : v6 plen/blen(0): 13/13: 1
+init_static_map(105): : v6 plen/blen(1): 13/12: 2
+init_static_map(105): : v6 plen/blen(2): 13/11: 4
+init_static_map(105): : v6 plen/blen(3): 13/10: 8
+init_static_map(105): : v6 plen/blen(0): 14/14: 1
+init_static_map(105): : v6 plen/blen(1): 14/13: 2
+init_static_map(105): : v6 plen/blen(2): 14/12: 4
+init_static_map(105): : v6 plen/blen(3): 14/11: 8
+init_static_map(105): : v6 plen/blen(0): 15/15: 1
+init_static_map(105): : v6 plen/blen(1): 15/14: 2
+init_static_map(105): : v6 plen/blen(2): 15/13: 4
+init_static_map(105): : v6 plen/blen(3): 15/12: 8
+init_static_map(105): : v6 plen/blen(0): 16/16: 1
+init_static_map(105): : v6 plen/blen(1): 16/15: 2
+init_static_map(105): : v6 plen/blen(2): 16/14: 4
+init_static_map(105): : v6 plen/blen(3): 16/13: 8
+init_static_map(105): : v6 plen/blen(0): 17/17: 1
+init_static_map(105): : v6 plen/blen(1): 17/16: 2
+init_static_map(105): : v6 plen/blen(2): 17/15: 4
+init_static_map(105): : v6 plen/blen(3): 17/14: 8
+init_static_map(105): : v6 plen/blen(0): 18/18: 1
+init_static_map(105): : v6 plen/blen(1): 18/17: 2
+init_static_map(105): : v6 plen/blen(2): 18/16: 4
+init_static_map(105): : v6 plen/blen(3): 18/15: 8
+init_static_map(105): : v6 plen/blen(0): 19/19: 1
+init_static_map(105): : v6 plen/blen(1): 19/18: 2
+init_static_map(105): : v6 plen/blen(2): 19/17: 4
+init_static_map(105): : v6 plen/blen(3): 19/16: 8
+init_static_map(105): : v6 plen/blen(0): 20/20: 1
+init_static_map(105): : v6 plen/blen(1): 20/19: 2
+init_static_map(105): : v6 plen/blen(2): 20/18: 4
+init_static_map(105): : v6 plen/blen(3): 20/17: 8
+init_static_map(105): : v6 plen/blen(0): 21/21: 1
+init_static_map(105): : v6 plen/blen(1): 21/20: 2
+init_static_map(105): : v6 plen/blen(2): 21/19: 4
+init_static_map(105): : v6 plen/blen(3): 21/18: 8
+init_static_map(105): : v6 plen/blen(0): 22/22: 1
+init_static_map(105): : v6 plen/blen(1): 22/21: 2
+init_static_map(105): : v6 plen/blen(2): 22/20: 4
+init_static_map(105): : v6 plen/blen(3): 22/19: 8
+init_static_map(105): : v6 plen/blen(0): 23/23: 1
+init_static_map(105): : v6 plen/blen(1): 23/22: 2
+init_static_map(105): : v6 plen/blen(2): 23/21: 4
+init_static_map(105): : v6 plen/blen(3): 23/20: 8
+init_static_map(105): : v6 plen/blen(0): 24/24: 1
+init_static_map(105): : v6 plen/blen(1): 24/23: 2
+init_static_map(105): : v6 plen/blen(2): 24/22: 4
+init_static_map(105): : v6 plen/blen(3): 24/21: 8
+init_static_map(105): : v6 plen/blen(0): 25/25: 1
+init_static_map(105): : v6 plen/blen(1): 25/24: 2
+init_static_map(105): : v6 plen/blen(2): 25/23: 4
+init_static_map(105): : v6 plen/blen(3): 25/22: 8
+init_static_map(105): : v6 plen/blen(0): 26/26: 1
+init_static_map(105): : v6 plen/blen(1): 26/25: 2
+init_static_map(105): : v6 plen/blen(2): 26/24: 4
+init_static_map(105): : v6 plen/blen(3): 26/23: 8
+init_static_map(105): : v6 plen/blen(0): 27/27: 1
+init_static_map(105): : v6 plen/blen(1): 27/26: 2
+init_static_map(105): : v6 plen/blen(2): 27/25: 4
+init_static_map(105): : v6 plen/blen(3): 27/24: 8
+init_static_map(105): : v6 plen/blen(0): 28/28: 1
+init_static_map(105): : v6 plen/blen(1): 28/27: 2
+init_static_map(105): : v6 plen/blen(2): 28/26: 4
+init_static_map(105): : v6 plen/blen(3): 28/25: 8
+init_static_map(105): : v6 plen/blen(0): 29/29: 1
+init_static_map(105): : v6 plen/blen(1): 29/28: 2
+init_static_map(105): : v6 plen/blen(2): 29/27: 4
+init_static_map(105): : v6 plen/blen(3): 29/26: 8
+init_static_map(105): : v6 plen/blen(0): 30/30: 1
+init_static_map(105): : v6 plen/blen(1): 30/29: 2
+init_static_map(105): : v6 plen/blen(2): 30/28: 4
+init_static_map(105): : v6 plen/blen(3): 30/27: 8
+init_static_map(105): : v6 plen/blen(0): 31/31: 1
+init_static_map(105): : v6 plen/blen(1): 31/30: 2
+init_static_map(105): : v6 plen/blen(2): 31/29: 4
+init_static_map(105): : v6 plen/blen(3): 31/28: 8
+init_static_map(105): : v6 plen/blen(0): 32/32: 1
+init_static_map(105): : v6 plen/blen(1): 32/31: 2
+init_static_map(105): : v6 plen/blen(2): 32/30: 4
+init_static_map(105): : v6 plen/blen(3): 32/29: 8
+init_static_map(105): : v6 plen/blen(0): 33/33: 1
+init_static_map(105): : v6 plen/blen(1): 33/32: 2
+init_static_map(105): : v6 plen/blen(2): 33/31: 4
+init_static_map(105): : v6 plen/blen(3): 33/30: 8
+init_static_map(105): : v6 plen/blen(0): 34/34: 1
+init_static_map(105): : v6 plen/blen(1): 34/33: 2
+init_static_map(105): : v6 plen/blen(2): 34/32: 4
+init_static_map(105): : v6 plen/blen(3): 34/31: 8
+init_static_map(105): : v6 plen/blen(0): 35/35: 1
+init_static_map(105): : v6 plen/blen(1): 35/34: 2
+init_static_map(105): : v6 plen/blen(2): 35/33: 4
+init_static_map(105): : v6 plen/blen(3): 35/32: 8
+init_static_map(105): : v6 plen/blen(0): 36/36: 1
+init_static_map(105): : v6 plen/blen(1): 36/35: 2
+init_static_map(105): : v6 plen/blen(2): 36/34: 4
+init_static_map(105): : v6 plen/blen(3): 36/33: 8
+init_static_map(105): : v6 plen/blen(0): 37/37: 1
+init_static_map(105): : v6 plen/blen(1): 37/36: 2
+init_static_map(105): : v6 plen/blen(2): 37/35: 4
+init_static_map(105): : v6 plen/blen(3): 37/34: 8
+init_static_map(105): : v6 plen/blen(0): 38/38: 1
+init_static_map(105): : v6 plen/blen(1): 38/37: 2
+init_static_map(105): : v6 plen/blen(2): 38/36: 4
+init_static_map(105): : v6 plen/blen(3): 38/35: 8
+init_static_map(105): : v6 plen/blen(0): 39/39: 1
+init_static_map(105): : v6 plen/blen(1): 39/38: 2
+init_static_map(105): : v6 plen/blen(2): 39/37: 4
+init_static_map(105): : v6 plen/blen(3): 39/36: 8
+init_static_map(105): : v6 plen/blen(0): 40/40: 1
+init_static_map(105): : v6 plen/blen(1): 40/39: 2
+init_static_map(105): : v6 plen/blen(2): 40/38: 4
+init_static_map(105): : v6 plen/blen(3): 40/37: 8
+init_static_map(105): : v6 plen/blen(0): 41/41: 1
+init_static_map(105): : v6 plen/blen(1): 41/40: 2
+init_static_map(105): : v6 plen/blen(2): 41/39: 4
+init_static_map(105): : v6 plen/blen(3): 41/38: 8
+init_static_map(105): : v6 plen/blen(0): 42/42: 1
+init_static_map(105): : v6 plen/blen(1): 42/41: 2
+init_static_map(105): : v6 plen/blen(2): 42/40: 4
+init_static_map(105): : v6 plen/blen(3): 42/39: 8
+init_static_map(105): : v6 plen/blen(0): 43/43: 1
+init_static_map(105): : v6 plen/blen(1): 43/42: 2
+init_static_map(105): : v6 plen/blen(2): 43/41: 4
+init_static_map(105): : v6 plen/blen(3): 43/40: 8
+init_static_map(105): : v6 plen/blen(0): 44/44: 1
+init_static_map(105): : v6 plen/blen(1): 44/43: 2
+init_static_map(105): : v6 plen/blen(2): 44/42: 4
+init_static_map(105): : v6 plen/blen(3): 44/41: 8
+init_static_map(105): : v6 plen/blen(0): 45/45: 1
+init_static_map(105): : v6 plen/blen(1): 45/44: 2
+init_static_map(105): : v6 plen/blen(2): 45/43: 4
+init_static_map(105): : v6 plen/blen(3): 45/42: 8
+init_static_map(105): : v6 plen/blen(0): 46/46: 1
+init_static_map(105): : v6 plen/blen(1): 46/45: 2
+init_static_map(105): : v6 plen/blen(2): 46/44: 4
+init_static_map(105): : v6 plen/blen(3): 46/43: 8
+init_static_map(105): : v6 plen/blen(0): 47/47: 1
+init_static_map(105): : v6 plen/blen(1): 47/46: 2
+init_static_map(105): : v6 plen/blen(2): 47/45: 4
+init_static_map(105): : v6 plen/blen(3): 47/44: 8
+init_static_map(105): : v6 plen/blen(0): 48/48: 1
+init_static_map(105): : v6 plen/blen(1): 48/47: 2
+init_static_map(105): : v6 plen/blen(2): 48/46: 4
+init_static_map(105): : v6 plen/blen(3): 48/45: 8
+init_static_map(105): : v6 plen/blen(0): 49/49: 1
+init_static_map(105): : v6 plen/blen(1): 49/48: 2
+init_static_map(105): : v6 plen/blen(2): 49/47: 4
+init_static_map(105): : v6 plen/blen(3): 49/46: 8
+init_static_map(105): : v6 plen/blen(0): 50/50: 1
+init_static_map(105): : v6 plen/blen(1): 50/49: 2
+init_static_map(105): : v6 plen/blen(2): 50/48: 4
+init_static_map(105): : v6 plen/blen(3): 50/47: 8
+init_static_map(105): : v6 plen/blen(0): 51/51: 1
+init_static_map(105): : v6 plen/blen(1): 51/50: 2
+init_static_map(105): : v6 plen/blen(2): 51/49: 4
+init_static_map(105): : v6 plen/blen(3): 51/48: 8
+init_static_map(105): : v6 plen/blen(0): 52/52: 1
+init_static_map(105): : v6 plen/blen(1): 52/51: 2
+init_static_map(105): : v6 plen/blen(2): 52/50: 4
+init_static_map(105): : v6 plen/blen(3): 52/49: 8
+init_static_map(105): : v6 plen/blen(0): 53/53: 1
+init_static_map(105): : v6 plen/blen(1): 53/52: 2
+init_static_map(105): : v6 plen/blen(2): 53/51: 4
+init_static_map(105): : v6 plen/blen(3): 53/50: 8
+init_static_map(105): : v6 plen/blen(0): 54/54: 1
+init_static_map(105): : v6 plen/blen(1): 54/53: 2
+init_static_map(105): : v6 plen/blen(2): 54/52: 4
+init_static_map(105): : v6 plen/blen(3): 54/51: 8
+init_static_map(105): : v6 plen/blen(0): 55/55: 1
+init_static_map(105): : v6 plen/blen(1): 55/54: 2
+init_static_map(105): : v6 plen/blen(2): 55/53: 4
+init_static_map(105): : v6 plen/blen(3): 55/52: 8
+init_static_map(105): : v6 plen/blen(0): 56/56: 1
+init_static_map(105): : v6 plen/blen(1): 56/55: 2
+init_static_map(105): : v6 plen/blen(2): 56/54: 4
+init_static_map(105): : v6 plen/blen(3): 56/53: 8
+init_static_map(105): : v6 plen/blen(0): 57/57: 1
+init_static_map(105): : v6 plen/blen(1): 57/56: 2
+init_static_map(105): : v6 plen/blen(2): 57/55: 4
+init_static_map(105): : v6 plen/blen(3): 57/54: 8
+init_static_map(105): : v6 plen/blen(0): 58/58: 1
+init_static_map(105): : v6 plen/blen(1): 58/57: 2
+init_static_map(105): : v6 plen/blen(2): 58/56: 4
+init_static_map(105): : v6 plen/blen(3): 58/55: 8
+init_static_map(105): : v6 plen/blen(0): 59/59: 1
+init_static_map(105): : v6 plen/blen(1): 59/58: 2
+init_static_map(105): : v6 plen/blen(2): 59/57: 4
+init_static_map(105): : v6 plen/blen(3): 59/56: 8
+init_static_map(105): : v6 plen/blen(0): 60/60: 1
+init_static_map(105): : v6 plen/blen(1): 60/59: 2
+init_static_map(105): : v6 plen/blen(2): 60/58: 4
+init_static_map(105): : v6 plen/blen(3): 60/57: 8
+init_static_map(105): : v6 plen/blen(0): 61/61: 1
+init_static_map(105): : v6 plen/blen(1): 61/60: 2
+init_static_map(105): : v6 plen/blen(2): 61/59: 4
+init_static_map(105): : v6 plen/blen(3): 61/58: 8
+init_static_map(105): : v6 plen/blen(0): 62/62: 1
+init_static_map(105): : v6 plen/blen(1): 62/61: 2
+init_static_map(105): : v6 plen/blen(2): 62/60: 4
+init_static_map(105): : v6 plen/blen(3): 62/59: 8
+init_static_map(105): : v6 plen/blen(0): 63/63: 1
+init_static_map(105): : v6 plen/blen(1): 63/62: 2
+init_static_map(105): : v6 plen/blen(2): 63/61: 4
+init_static_map(105): : v6 plen/blen(3): 63/60: 8
+init_static_map(105): : v6 plen/blen(0): 64/64: 1
+init_static_map(105): : v6 plen/blen(1): 64/63: 2
+init_static_map(105): : v6 plen/blen(2): 64/62: 4
+init_static_map(105): : v6 plen/blen(3): 64/61: 8
+init_static_map(105): : v6 plen/blen(0): 65/65: 1
+init_static_map(105): : v6 plen/blen(1): 65/64: 2
+init_static_map(105): : v6 plen/blen(2): 65/63: 4
+init_static_map(105): : v6 plen/blen(3): 65/62: 8
+init_static_map(105): : v6 plen/blen(0): 66/66: 1
+init_static_map(105): : v6 plen/blen(1): 66/65: 2
+init_static_map(105): : v6 plen/blen(2): 66/64: 4
+init_static_map(105): : v6 plen/blen(3): 66/63: 8
+init_static_map(105): : v6 plen/blen(0): 67/67: 1
+init_static_map(105): : v6 plen/blen(1): 67/66: 2
+init_static_map(105): : v6 plen/blen(2): 67/65: 4
+init_static_map(105): : v6 plen/blen(3): 67/64: 8
+init_static_map(105): : v6 plen/blen(0): 68/68: 1
+init_static_map(105): : v6 plen/blen(1): 68/67: 2
+init_static_map(105): : v6 plen/blen(2): 68/66: 4
+init_static_map(105): : v6 plen/blen(3): 68/65: 8
+init_static_map(105): : v6 plen/blen(0): 69/69: 1
+init_static_map(105): : v6 plen/blen(1): 69/68: 2
+init_static_map(105): : v6 plen/blen(2): 69/67: 4
+init_static_map(105): : v6 plen/blen(3): 69/66: 8
+init_static_map(105): : v6 plen/blen(0): 70/70: 1
+init_static_map(105): : v6 plen/blen(1): 70/69: 2
+init_static_map(105): : v6 plen/blen(2): 70/68: 4
+init_static_map(105): : v6 plen/blen(3): 70/67: 8
+init_static_map(105): : v6 plen/blen(0): 71/71: 1
+init_static_map(105): : v6 plen/blen(1): 71/70: 2
+init_static_map(105): : v6 plen/blen(2): 71/69: 4
+init_static_map(105): : v6 plen/blen(3): 71/68: 8
+init_static_map(105): : v6 plen/blen(0): 72/72: 1
+init_static_map(105): : v6 plen/blen(1): 72/71: 2
+init_static_map(105): : v6 plen/blen(2): 72/70: 4
+init_static_map(105): : v6 plen/blen(3): 72/69: 8
+init_static_map(105): : v6 plen/blen(0): 73/73: 1
+init_static_map(105): : v6 plen/blen(1): 73/72: 2
+init_static_map(105): : v6 plen/blen(2): 73/71: 4
+init_static_map(105): : v6 plen/blen(3): 73/70: 8
+init_static_map(105): : v6 plen/blen(0): 74/74: 1
+init_static_map(105): : v6 plen/blen(1): 74/73: 2
+init_static_map(105): : v6 plen/blen(2): 74/72: 4
+init_static_map(105): : v6 plen/blen(3): 74/71: 8
+init_static_map(105): : v6 plen/blen(0): 75/75: 1
+init_static_map(105): : v6 plen/blen(1): 75/74: 2
+init_static_map(105): : v6 plen/blen(2): 75/73: 4
+init_static_map(105): : v6 plen/blen(3): 75/72: 8
+init_static_map(105): : v6 plen/blen(0): 76/76: 1
+init_static_map(105): : v6 plen/blen(1): 76/75: 2
+init_static_map(105): : v6 plen/blen(2): 76/74: 4
+init_static_map(105): : v6 plen/blen(3): 76/73: 8
+init_static_map(105): : v6 plen/blen(0): 77/77: 1
+init_static_map(105): : v6 plen/blen(1): 77/76: 2
+init_static_map(105): : v6 plen/blen(2): 77/75: 4
+init_static_map(105): : v6 plen/blen(3): 77/74: 8
+init_static_map(105): : v6 plen/blen(0): 78/78: 1
+init_static_map(105): : v6 plen/blen(1): 78/77: 2
+init_static_map(105): : v6 plen/blen(2): 78/76: 4
+init_static_map(105): : v6 plen/blen(3): 78/75: 8
+init_static_map(105): : v6 plen/blen(0): 79/79: 1
+init_static_map(105): : v6 plen/blen(1): 79/78: 2
+init_static_map(105): : v6 plen/blen(2): 79/77: 4
+init_static_map(105): : v6 plen/blen(3): 79/76: 8
+init_static_map(105): : v6 plen/blen(0): 80/80: 1
+init_static_map(105): : v6 plen/blen(1): 80/79: 2
+init_static_map(105): : v6 plen/blen(2): 80/78: 4
+init_static_map(105): : v6 plen/blen(3): 80/77: 8
+init_static_map(105): : v6 plen/blen(0): 81/81: 1
+init_static_map(105): : v6 plen/blen(1): 81/80: 2
+init_static_map(105): : v6 plen/blen(2): 81/79: 4
+init_static_map(105): : v6 plen/blen(3): 81/78: 8
+init_static_map(105): : v6 plen/blen(0): 82/82: 1
+init_static_map(105): : v6 plen/blen(1): 82/81: 2
+init_static_map(105): : v6 plen/blen(2): 82/80: 4
+init_static_map(105): : v6 plen/blen(3): 82/79: 8
+init_static_map(105): : v6 plen/blen(0): 83/83: 1
+init_static_map(105): : v6 plen/blen(1): 83/82: 2
+init_static_map(105): : v6 plen/blen(2): 83/81: 4
+init_static_map(105): : v6 plen/blen(3): 83/80: 8
+init_static_map(105): : v6 plen/blen(0): 84/84: 1
+init_static_map(105): : v6 plen/blen(1): 84/83: 2
+init_static_map(105): : v6 plen/blen(2): 84/82: 4
+init_static_map(105): : v6 plen/blen(3): 84/81: 8
+init_static_map(105): : v6 plen/blen(0): 85/85: 1
+init_static_map(105): : v6 plen/blen(1): 85/84: 2
+init_static_map(105): : v6 plen/blen(2): 85/83: 4
+init_static_map(105): : v6 plen/blen(3): 85/82: 8
+init_static_map(105): : v6 plen/blen(0): 86/86: 1
+init_static_map(105): : v6 plen/blen(1): 86/85: 2
+init_static_map(105): : v6 plen/blen(2): 86/84: 4
+init_static_map(105): : v6 plen/blen(3): 86/83: 8
+init_static_map(105): : v6 plen/blen(0): 87/87: 1
+init_static_map(105): : v6 plen/blen(1): 87/86: 2
+init_static_map(105): : v6 plen/blen(2): 87/85: 4
+init_static_map(105): : v6 plen/blen(3): 87/84: 8
+init_static_map(105): : v6 plen/blen(0): 88/88: 1
+init_static_map(105): : v6 plen/blen(1): 88/87: 2
+init_static_map(105): : v6 plen/blen(2): 88/86: 4
+init_static_map(105): : v6 plen/blen(3): 88/85: 8
+init_static_map(105): : v6 plen/blen(0): 89/89: 1
+init_static_map(105): : v6 plen/blen(1): 89/88: 2
+init_static_map(105): : v6 plen/blen(2): 89/87: 4
+init_static_map(105): : v6 plen/blen(3): 89/86: 8
+init_static_map(105): : v6 plen/blen(0): 90/90: 1
+init_static_map(105): : v6 plen/blen(1): 90/89: 2
+init_static_map(105): : v6 plen/blen(2): 90/88: 4
+init_static_map(105): : v6 plen/blen(3): 90/87: 8
+init_static_map(105): : v6 plen/blen(0): 91/91: 1
+init_static_map(105): : v6 plen/blen(1): 91/90: 2
+init_static_map(105): : v6 plen/blen(2): 91/89: 4
+init_static_map(105): : v6 plen/blen(3): 91/88: 8
+init_static_map(105): : v6 plen/blen(0): 92/92: 1
+init_static_map(105): : v6 plen/blen(1): 92/91: 2
+init_static_map(105): : v6 plen/blen(2): 92/90: 4
+init_static_map(105): : v6 plen/blen(3): 92/89: 8
+init_static_map(105): : v6 plen/blen(0): 93/93: 1
+init_static_map(105): : v6 plen/blen(1): 93/92: 2
+init_static_map(105): : v6 plen/blen(2): 93/91: 4
+init_static_map(105): : v6 plen/blen(3): 93/90: 8
+init_static_map(105): : v6 plen/blen(0): 94/94: 1
+init_static_map(105): : v6 plen/blen(1): 94/93: 2
+init_static_map(105): : v6 plen/blen(2): 94/92: 4
+init_static_map(105): : v6 plen/blen(3): 94/91: 8
+init_static_map(105): : v6 plen/blen(0): 95/95: 1
+init_static_map(105): : v6 plen/blen(1): 95/94: 2
+init_static_map(105): : v6 plen/blen(2): 95/93: 4
+init_static_map(105): : v6 plen/blen(3): 95/92: 8
+init_static_map(105): : v6 plen/blen(0): 96/96: 1
+init_static_map(105): : v6 plen/blen(1): 96/95: 2
+init_static_map(105): : v6 plen/blen(2): 96/94: 4
+init_static_map(105): : v6 plen/blen(3): 96/93: 8
+init_static_map(105): : v6 plen/blen(0): 97/97: 1
+init_static_map(105): : v6 plen/blen(1): 97/96: 2
+init_static_map(105): : v6 plen/blen(2): 97/95: 4
+init_static_map(105): : v6 plen/blen(3): 97/94: 8
+init_static_map(105): : v6 plen/blen(0): 98/98: 1
+init_static_map(105): : v6 plen/blen(1): 98/97: 2
+init_static_map(105): : v6 plen/blen(2): 98/96: 4
+init_static_map(105): : v6 plen/blen(3): 98/95: 8
+init_static_map(105): : v6 plen/blen(0): 99/99: 1
+init_static_map(105): : v6 plen/blen(1): 99/98: 2
+init_static_map(105): : v6 plen/blen(2): 99/97: 4
+init_static_map(105): : v6 plen/blen(3): 99/96: 8
+init_static_map(105): : v6 plen/blen(0): 100/100: 1
+init_static_map(105): : v6 plen/blen(1): 100/99: 2
+init_static_map(105): : v6 plen/blen(2): 100/98: 4
+init_static_map(105): : v6 plen/blen(3): 100/97: 8
+init_static_map(105): : v6 plen/blen(0): 101/101: 1
+init_static_map(105): : v6 plen/blen(1): 101/100: 2
+init_static_map(105): : v6 plen/blen(2): 101/99: 4
+init_static_map(105): : v6 plen/blen(3): 101/98: 8
+init_static_map(105): : v6 plen/blen(0): 102/102: 1
+init_static_map(105): : v6 plen/blen(1): 102/101: 2
+init_static_map(105): : v6 plen/blen(2): 102/100: 4
+init_static_map(105): : v6 plen/blen(3): 102/99: 8
+init_static_map(105): : v6 plen/blen(0): 103/103: 1
+init_static_map(105): : v6 plen/blen(1): 103/102: 2
+init_static_map(105): : v6 plen/blen(2): 103/101: 4
+init_static_map(105): : v6 plen/blen(3): 103/100: 8
+init_static_map(105): : v6 plen/blen(0): 104/104: 1
+init_static_map(105): : v6 plen/blen(1): 104/103: 2
+init_static_map(105): : v6 plen/blen(2): 104/102: 4
+init_static_map(105): : v6 plen/blen(3): 104/101: 8
+init_static_map(105): : v6 plen/blen(0): 105/105: 1
+init_static_map(105): : v6 plen/blen(1): 105/104: 2
+init_static_map(105): : v6 plen/blen(2): 105/103: 4
+init_static_map(105): : v6 plen/blen(3): 105/102: 8
+init_static_map(105): : v6 plen/blen(0): 106/106: 1
+init_static_map(105): : v6 plen/blen(1): 106/105: 2
+init_static_map(105): : v6 plen/blen(2): 106/104: 4
+init_static_map(105): : v6 plen/blen(3): 106/103: 8
+init_static_map(105): : v6 plen/blen(0): 107/107: 1
+init_static_map(105): : v6 plen/blen(1): 107/106: 2
+init_static_map(105): : v6 plen/blen(2): 107/105: 4
+init_static_map(105): : v6 plen/blen(3): 107/104: 8
+init_static_map(105): : v6 plen/blen(0): 108/108: 1
+init_static_map(105): : v6 plen/blen(1): 108/107: 2
+init_static_map(105): : v6 plen/blen(2): 108/106: 4
+init_static_map(105): : v6 plen/blen(3): 108/105: 8
+init_static_map(105): : v6 plen/blen(0): 109/109: 1
+init_static_map(105): : v6 plen/blen(1): 109/108: 2
+init_static_map(105): : v6 plen/blen(2): 109/107: 4
+init_static_map(105): : v6 plen/blen(3): 109/106: 8
+init_static_map(105): : v6 plen/blen(0): 110/110: 1
+init_static_map(105): : v6 plen/blen(1): 110/109: 2
+init_static_map(105): : v6 plen/blen(2): 110/108: 4
+init_static_map(105): : v6 plen/blen(3): 110/107: 8
+init_static_map(105): : v6 plen/blen(0): 111/111: 1
+init_static_map(105): : v6 plen/blen(1): 111/110: 2
+init_static_map(105): : v6 plen/blen(2): 111/109: 4
+init_static_map(105): : v6 plen/blen(3): 111/108: 8
+init_static_map(105): : v6 plen/blen(0): 112/112: 1
+init_static_map(105): : v6 plen/blen(1): 112/111: 2
+init_static_map(105): : v6 plen/blen(2): 112/110: 4
+init_static_map(105): : v6 plen/blen(3): 112/109: 8
+init_static_map(105): : v6 plen/blen(0): 113/113: 1
+init_static_map(105): : v6 plen/blen(1): 113/112: 2
+init_static_map(105): : v6 plen/blen(2): 113/111: 4
+init_static_map(105): : v6 plen/blen(3): 113/110: 8
+init_static_map(105): : v6 plen/blen(0): 114/114: 1
+init_static_map(105): : v6 plen/blen(1): 114/113: 2
+init_static_map(105): : v6 plen/blen(2): 114/112: 4
+init_static_map(105): : v6 plen/blen(3): 114/111: 8
+init_static_map(105): : v6 plen/blen(0): 115/115: 1
+init_static_map(105): : v6 plen/blen(1): 115/114: 2
+init_static_map(105): : v6 plen/blen(2): 115/113: 4
+init_static_map(105): : v6 plen/blen(3): 115/112: 8
+init_static_map(105): : v6 plen/blen(0): 116/116: 1
+init_static_map(105): : v6 plen/blen(1): 116/115: 2
+init_static_map(105): : v6 plen/blen(2): 116/114: 4
+init_static_map(105): : v6 plen/blen(3): 116/113: 8
+init_static_map(105): : v6 plen/blen(0): 117/117: 1
+init_static_map(105): : v6 plen/blen(1): 117/116: 2
+init_static_map(105): : v6 plen/blen(2): 117/115: 4
+init_static_map(105): : v6 plen/blen(3): 117/114: 8
+init_static_map(105): : v6 plen/blen(0): 118/118: 1
+init_static_map(105): : v6 plen/blen(1): 118/117: 2
+init_static_map(105): : v6 plen/blen(2): 118/116: 4
+init_static_map(105): : v6 plen/blen(3): 118/115: 8
+init_static_map(105): : v6 plen/blen(0): 119/119: 1
+init_static_map(105): : v6 plen/blen(1): 119/118: 2
+init_static_map(105): : v6 plen/blen(2): 119/117: 4
+init_static_map(105): : v6 plen/blen(3): 119/116: 8
+init_static_map(105): : v6 plen/blen(0): 120/120: 1
+init_static_map(105): : v6 plen/blen(1): 120/119: 2
+init_static_map(105): : v6 plen/blen(2): 120/118: 4
+init_static_map(105): : v6 plen/blen(3): 120/117: 8
+init_static_map(105): : v6 plen/blen(0): 121/121: 1
+init_static_map(105): : v6 plen/blen(1): 121/120: 2
+init_static_map(105): : v6 plen/blen(2): 121/119: 4
+init_static_map(105): : v6 plen/blen(3): 121/118: 8
+init_static_map(105): : v6 plen/blen(0): 122/122: 1
+init_static_map(105): : v6 plen/blen(1): 122/121: 2
+init_static_map(105): : v6 plen/blen(2): 122/120: 4
+init_static_map(105): : v6 plen/blen(3): 122/119: 8
+init_static_map(105): : v6 plen/blen(0): 123/123: 1
+init_static_map(105): : v6 plen/blen(1): 123/122: 2
+init_static_map(105): : v6 plen/blen(2): 123/121: 4
+init_static_map(105): : v6 plen/blen(3): 123/120: 8
+init_static_map(105): : v6 plen/blen(0): 124/124: 1
+init_static_map(105): : v6 plen/blen(1): 124/123: 2
+init_static_map(105): : v6 plen/blen(2): 124/122: 4
+init_static_map(105): : v6 plen/blen(3): 124/121: 8
+init_static_map(105): : v6 plen/blen(0): 125/125: 1
+init_static_map(105): : v6 plen/blen(1): 125/124: 2
+init_static_map(105): : v6 plen/blen(2): 125/123: 4
+init_static_map(105): : v6 plen/blen(3): 125/122: 8
+init_static_map(105): : v6 plen/blen(0): 126/126: 1
+init_static_map(105): : v6 plen/blen(1): 126/125: 2
+init_static_map(105): : v6 plen/blen(2): 126/124: 4
+init_static_map(105): : v6 plen/blen(3): 126/123: 8
+init_static_map(105): : v6 plen/blen(0): 127/127: 1
+init_static_map(105): : v6 plen/blen(1): 127/126: 2
+init_static_map(105): : v6 plen/blen(2): 127/125: 4
+init_static_map(105): : v6 plen/blen(3): 127/124: 8
+test_init_entries(245): Adding route prefix_len: 29 count: 1
+add_route(215): Adding wt: prefix_len: 29 base_len: 29 wt: 1
+add_route(215): Adding wt: prefix_len: 29 base_len: 28 wt: 2
+add_route(215): Adding wt: prefix_len: 29 base_len: 27 wt: 4
+add_route(215): Adding wt: prefix_len: 29 base_len: 26 wt: 8
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 26  weight: 8
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 27  weight: 4
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 28  weight: 2
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 29  weight: 1
+test_init_entries(245): Adding route prefix_len: 9 count: 1
+add_route(215): Adding wt: prefix_len: 9 base_len: 9 wt: 1
+add_route(215): Adding wt: prefix_len: 9 base_len: 8 wt: 2
+add_route(215): Adding wt: prefix_len: 9 base_len: 7 wt: 4
+add_route(215): Adding wt: prefix_len: 9 base_len: 6 wt: 8
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 6  weight: 8
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 7  weight: 4
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 8  weight: 2
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 9  weight: 1
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 26  weight: 8
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 27  weight: 4
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 28  weight: 2
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 29  weight: 1
+test_init_entries(245): Adding route prefix_len: 28 count: 1
+add_route(204): updating wt(0): prefix_len: 28 base_len: 28 old wt: 2 new wt: 3
+update_weight(151): 28 : 28
+update_weight(155): : Found 28;2 new wt: 3
+add_route(204): updating wt(0): prefix_len: 28 base_len: 27 old wt: 4 new wt: 6
+update_weight(151): 27 : 27
+update_weight(155): : Found 27;4 new wt: 6
+add_route(204): updating wt(0): prefix_len: 28 base_len: 26 old wt: 8 new wt: 12
+update_weight(151): 26 : 26
+update_weight(155): : Found 26;8 new wt: 12
+add_route(215): Adding wt: prefix_len: 28 base_len: 25 wt: 8
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 6  weight: 8
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 7  weight: 4
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 8  weight: 2
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 9  weight: 1
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 25  weight: 8
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 26  weight: 12
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 27  weight: 6
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 28  weight: 3
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 29  weight: 1
+test_init_entries(245): Adding route prefix_len: 7 count: 1
+add_route(204): updating wt(0): prefix_len: 7 base_len: 7 old wt: 4 new wt: 5
+update_weight(151): 7 : 7
+update_weight(155): : Found 7;4 new wt: 5
+add_route(204): updating wt(0): prefix_len: 7 base_len: 6 old wt: 8 new wt: 10
+update_weight(151): 6 : 6
+update_weight(155): : Found 6;8 new wt: 10
+add_route(215): Adding wt: prefix_len: 7 base_len: 5 wt: 4
+add_route(215): Adding wt: prefix_len: 7 base_len: 4 wt: 8
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 4  weight: 8
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 5  weight: 4
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 6  weight: 10
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 7  weight: 5
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 8  weight: 2
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 9  weight: 1
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 25  weight: 8
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 26  weight: 12
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 27  weight: 6
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 28  weight: 3
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 29  weight: 1
+test_init_entries(245): Adding route prefix_len: 21 count: 1
+add_route(215): Adding wt: prefix_len: 21 base_len: 21 wt: 1
+add_route(215): Adding wt: prefix_len: 21 base_len: 20 wt: 2
+add_route(215): Adding wt: prefix_len: 21 base_len: 19 wt: 4
+add_route(215): Adding wt: prefix_len: 21 base_len: 18 wt: 8
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 4  weight: 8
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 5  weight: 4
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 6  weight: 10
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 7  weight: 5
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 8  weight: 2
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 9  weight: 1
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 18  weight: 8
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 19  weight: 4
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 20  weight: 2
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 21  weight: 1
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 25  weight: 8
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 26  weight: 12
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 27  weight: 6
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 28  weight: 3
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 29  weight: 1
+test_init_entries(279): ____________________
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 4  weight: 8
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 5  weight: 4
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 6  weight: 10
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 7  weight: 5
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 8  weight: 2
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 9  weight: 1
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 18  weight: 8
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 19  weight: 4
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 20  weight: 2
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 21  weight: 1
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 25  weight: 8
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 26  weight: 12
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 27  weight: 6
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 28  weight: 3
+print_multiset_nzw_heapl(393): myheapl (v4)-> prefix_len: 29  weight: 1
+test_init_entries(282): ********************
+print_multiset_nzw_heapw(416): myheapw (v4)-> prefix_len: 26  weight: 12
+print_multiset_nzw_heapw(416): myheapw (v4)-> prefix_len: 6  weight: 10
+print_multiset_nzw_heapw(416): myheapw (v4)-> prefix_len: 25  weight: 8
+print_multiset_nzw_heapw(416): myheapw (v4)-> prefix_len: 4  weight: 8
+print_multiset_nzw_heapw(416): myheapw (v4)-> prefix_len: 18  weight: 8
+print_multiset_nzw_heapw(416): myheapw (v4)-> prefix_len: 27  weight: 6
+print_multiset_nzw_heapw(416): myheapw (v4)-> prefix_len: 7  weight: 5
+print_multiset_nzw_heapw(416): myheapw (v4)-> prefix_len: 5  weight: 4
+print_multiset_nzw_heapw(416): myheapw (v4)-> prefix_len: 19  weight: 4
+print_multiset_nzw_heapw(416): myheapw (v4)-> prefix_len: 28  weight: 3
+print_multiset_nzw_heapw(416): myheapw (v4)-> prefix_len: 8  weight: 2
+print_multiset_nzw_heapw(416): myheapw (v4)-> prefix_len: 20  weight: 2
+print_multiset_nzw_heapw(416): myheapw (v4)-> prefix_len: 29  weight: 1
+print_multiset_nzw_heapw(416): myheapw (v4)-> prefix_len: 9  weight: 1
+print_multiset_nzw_heapw(416): myheapw (v4)-> prefix_len: 21  weight: 1
+print_multiset_nzw_heapw(419): ___________________________________________
+print_multiset_nzw_heapw(419): ___________________________________________
+test_init_entries(285): ____________________
+Max V4 prefix_len: 26 weight: 12
+get_best_entry(434): ERROR: Could not find best entry

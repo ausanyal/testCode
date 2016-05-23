@@ -1,0 +1,2 @@
+link_accel: 1/97, ALL
+global-accel: ALL

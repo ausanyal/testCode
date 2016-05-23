@@ -1,0 +1,211 @@
+init_static_map(57): : plen/blen: 0/0: 1
+init_static_map(57): : plen/blen: 1/1: 1
+init_static_map(57): : plen/blen: 1/0: 2
+init_static_map(57): : plen/blen: 2/2: 1
+init_static_map(57): : plen/blen: 2/1: 2
+init_static_map(57): : plen/blen: 2/0: 4
+init_static_map(57): : plen/blen: 3/3: 1
+init_static_map(57): : plen/blen: 3/2: 2
+init_static_map(57): : plen/blen: 3/1: 4
+init_static_map(57): : plen/blen: 3/0: 8
+init_static_map(57): : plen/blen: 4/4: 1
+init_static_map(57): : plen/blen: 4/3: 2
+init_static_map(57): : plen/blen: 4/2: 4
+init_static_map(57): : plen/blen: 4/1: 8
+init_static_map(57): : plen/blen: 5/5: 1
+init_static_map(57): : plen/blen: 5/4: 2
+init_static_map(57): : plen/blen: 5/3: 4
+init_static_map(57): : plen/blen: 5/2: 8
+init_static_map(57): : plen/blen: 6/6: 1
+init_static_map(57): : plen/blen: 6/5: 2
+init_static_map(57): : plen/blen: 6/4: 4
+init_static_map(57): : plen/blen: 6/3: 8
+init_static_map(57): : plen/blen: 7/7: 1
+init_static_map(57): : plen/blen: 7/6: 2
+init_static_map(57): : plen/blen: 7/5: 4
+init_static_map(57): : plen/blen: 7/4: 8
+init_static_map(57): : plen/blen: 8/8: 1
+init_static_map(57): : plen/blen: 8/7: 2
+init_static_map(57): : plen/blen: 8/6: 4
+init_static_map(57): : plen/blen: 8/5: 8
+init_static_map(57): : plen/blen: 9/9: 1
+init_static_map(57): : plen/blen: 9/8: 2
+init_static_map(57): : plen/blen: 9/7: 4
+init_static_map(57): : plen/blen: 9/6: 8
+init_static_map(57): : plen/blen: 10/10: 1
+init_static_map(57): : plen/blen: 10/9: 2
+init_static_map(57): : plen/blen: 10/8: 4
+init_static_map(57): : plen/blen: 10/7: 8
+init_static_map(57): : plen/blen: 11/11: 1
+init_static_map(57): : plen/blen: 11/10: 2
+init_static_map(57): : plen/blen: 11/9: 4
+init_static_map(57): : plen/blen: 11/8: 8
+init_static_map(57): : plen/blen: 12/12: 1
+init_static_map(57): : plen/blen: 12/11: 2
+init_static_map(57): : plen/blen: 12/10: 4
+init_static_map(57): : plen/blen: 12/9: 8
+init_static_map(57): : plen/blen: 13/13: 1
+init_static_map(57): : plen/blen: 13/12: 2
+init_static_map(57): : plen/blen: 13/11: 4
+init_static_map(57): : plen/blen: 13/10: 8
+init_static_map(57): : plen/blen: 14/14: 1
+init_static_map(57): : plen/blen: 14/13: 2
+init_static_map(57): : plen/blen: 14/12: 4
+init_static_map(57): : plen/blen: 14/11: 8
+init_static_map(57): : plen/blen: 15/15: 1
+init_static_map(57): : plen/blen: 15/14: 2
+init_static_map(57): : plen/blen: 15/13: 4
+init_static_map(57): : plen/blen: 15/12: 8
+init_static_map(57): : plen/blen: 16/16: 1
+init_static_map(57): : plen/blen: 16/15: 2
+init_static_map(57): : plen/blen: 16/14: 4
+init_static_map(57): : plen/blen: 16/13: 8
+init_static_map(57): : plen/blen: 17/17: 1
+init_static_map(57): : plen/blen: 17/16: 2
+init_static_map(57): : plen/blen: 17/15: 4
+init_static_map(57): : plen/blen: 17/14: 8
+init_static_map(57): : plen/blen: 18/18: 1
+init_static_map(57): : plen/blen: 18/17: 2
+init_static_map(57): : plen/blen: 18/16: 4
+init_static_map(57): : plen/blen: 18/15: 8
+init_static_map(57): : plen/blen: 19/19: 1
+init_static_map(57): : plen/blen: 19/18: 2
+init_static_map(57): : plen/blen: 19/17: 4
+init_static_map(57): : plen/blen: 19/16: 8
+init_static_map(57): : plen/blen: 20/20: 1
+init_static_map(57): : plen/blen: 20/19: 2
+init_static_map(57): : plen/blen: 20/18: 4
+init_static_map(57): : plen/blen: 20/17: 8
+init_static_map(57): : plen/blen: 21/21: 1
+init_static_map(57): : plen/blen: 21/20: 2
+init_static_map(57): : plen/blen: 21/19: 4
+init_static_map(57): : plen/blen: 21/18: 8
+init_static_map(57): : plen/blen: 22/22: 1
+init_static_map(57): : plen/blen: 22/21: 2
+init_static_map(57): : plen/blen: 22/20: 4
+init_static_map(57): : plen/blen: 22/19: 8
+init_static_map(57): : plen/blen: 23/23: 1
+init_static_map(57): : plen/blen: 23/22: 2
+init_static_map(57): : plen/blen: 23/21: 4
+init_static_map(57): : plen/blen: 23/20: 8
+init_static_map(57): : plen/blen: 24/24: 1
+init_static_map(57): : plen/blen: 24/23: 2
+init_static_map(57): : plen/blen: 24/22: 4
+init_static_map(57): : plen/blen: 24/21: 8
+init_static_map(57): : plen/blen: 25/25: 1
+init_static_map(57): : plen/blen: 25/24: 2
+init_static_map(57): : plen/blen: 25/23: 4
+init_static_map(57): : plen/blen: 25/22: 8
+init_static_map(57): : plen/blen: 26/26: 1
+init_static_map(57): : plen/blen: 26/25: 2
+init_static_map(57): : plen/blen: 26/24: 4
+init_static_map(57): : plen/blen: 26/23: 8
+init_static_map(57): : plen/blen: 27/27: 1
+init_static_map(57): : plen/blen: 27/26: 2
+init_static_map(57): : plen/blen: 27/25: 4
+init_static_map(57): : plen/blen: 27/24: 8
+init_static_map(57): : plen/blen: 28/28: 1
+init_static_map(57): : plen/blen: 28/27: 2
+init_static_map(57): : plen/blen: 28/26: 4
+init_static_map(57): : plen/blen: 28/25: 8
+init_static_map(57): : plen/blen: 29/29: 1
+init_static_map(57): : plen/blen: 29/28: 2
+init_static_map(57): : plen/blen: 29/27: 4
+init_static_map(57): : plen/blen: 29/26: 8
+init_static_map(57): : plen/blen: 30/30: 1
+init_static_map(57): : plen/blen: 30/29: 2
+init_static_map(57): : plen/blen: 30/28: 4
+init_static_map(57): : plen/blen: 30/27: 8
+init_static_map(57): : plen/blen: 31/31: 1
+init_static_map(57): : plen/blen: 31/30: 2
+init_static_map(57): : plen/blen: 31/29: 4
+init_static_map(57): : plen/blen: 31/28: 8
+init_static_map(57): : plen/blen: 32/32: 1
+init_static_map(57): : plen/blen: 32/31: 2
+init_static_map(57): : plen/blen: 32/30: 4
+init_static_map(57): : plen/blen: 32/29: 8
+test_init_entries(198): Adding route prefix_len: 12
+add_route(163): Not found
+add_route(173): Adding wt: prefix_len: 12 base_len: 12 wt: 1
+add_route(173): Adding wt: prefix_len: 12 base_len: 11 wt: 2
+add_route(173): Adding wt: prefix_len: 12 base_len: 10 wt: 4
+add_route(173): Adding wt: prefix_len: 12 base_len: 9 wt: 8
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 9  weight: 8
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 10  weight: 4
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 11  weight: 2
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 12  weight: 1
+test_init_entries(198): Adding route prefix_len: 9
+add_route(146): Found 9;8
+add_route(155): updating wt: prefix_len: 9 base_len: 9 old wt: 8 new wt: 9
+update_weight(101): : Found 9;8 new wt: 9
+add_route(155): updating wt: prefix_len: 9 base_len: 8 old wt: 9 new wt: 20
+update_weight(124): Adding wt: prefix_len: 9 base_len: 8 wt: 2
+add_route(155): updating wt: prefix_len: 9 base_len: 7 old wt: 9 new wt: 40
+update_weight(124): Adding wt: prefix_len: 9 base_len: 7 wt: 4
+add_route(155): updating wt: prefix_len: 9 base_len: 6 old wt: 9 new wt: 80
+update_weight(124): Adding wt: prefix_len: 9 base_len: 6 wt: 8
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 6  weight: 8
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 7  weight: 4
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 8  weight: 2
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 9  weight: 9
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 10  weight: 4
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 11  weight: 2
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 12  weight: 1
+test_init_entries(198): Adding route prefix_len: 8
+add_route(146): Found 8;2
+add_route(155): updating wt: prefix_len: 8 base_len: 8 old wt: 2 new wt: 3
+update_weight(101): : Found 8;2 new wt: 3
+add_route(155): updating wt: prefix_len: 8 base_len: 7 old wt: 2 new wt: 6
+update_weight(101): : Found 7;4 new wt: 6
+add_route(155): updating wt: prefix_len: 8 base_len: 6 old wt: 2 new wt: 12
+update_weight(101): : Found 6;8 new wt: 12
+add_route(155): updating wt: prefix_len: 8 base_len: 5 old wt: 2 new wt: 24
+update_weight(124): Adding wt: prefix_len: 8 base_len: 5 wt: 8
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 5  weight: 8
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 6  weight: 12
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 7  weight: 6
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 8  weight: 3
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 9  weight: 9
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 10  weight: 4
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 11  weight: 2
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 12  weight: 1
+test_init_entries(198): Adding route prefix_len: 16
+add_route(163): Not found
+add_route(173): Adding wt: prefix_len: 16 base_len: 16 wt: 2
+add_route(173): Adding wt: prefix_len: 16 base_len: 15 wt: 4
+add_route(173): Adding wt: prefix_len: 16 base_len: 14 wt: 8
+add_route(173): Adding wt: prefix_len: 16 base_len: 13 wt: 16
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 5  weight: 8
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 6  weight: 12
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 7  weight: 6
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 8  weight: 3
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 9  weight: 9
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 10  weight: 4
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 11  weight: 2
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 12  weight: 1
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 13  weight: 16
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 14  weight: 8
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 15  weight: 4
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 16  weight: 2
+test_init_entries(198): Adding route prefix_len: 15
+add_route(146): Found 15;4
+add_route(155): updating wt: prefix_len: 15 base_len: 15 old wt: 4 new wt: 5
+update_weight(101): : Found 15;4 new wt: 5
+add_route(155): updating wt: prefix_len: 15 base_len: 14 old wt: 5 new wt: 12
+update_weight(101): : Found 14;8 new wt: 12
+add_route(155): updating wt: prefix_len: 15 base_len: 13 old wt: 5 new wt: 24
+update_weight(101): : Found 13;16 new wt: 24
+add_route(155): updating wt: prefix_len: 15 base_len: 12 old wt: 5 new wt: 48
+update_weight(101): : Found 12;1 new wt: 48
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 5  weight: 8
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 6  weight: 12
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 7  weight: 6
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 8  weight: 3
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 9  weight: 9
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 10  weight: 4
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 11  weight: 2
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 12  weight: 48
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 13  weight: 24
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 14  weight: 12
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 15  weight: 5
+print_multiset_nzw_heapl(310): myheapl-> prefix_len: 16  weight: 2
